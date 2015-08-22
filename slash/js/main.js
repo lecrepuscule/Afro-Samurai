@@ -3,13 +3,17 @@ $(document).ready(function(){
 })
 
 function initGame(){
-  $("#red-dot-1").offset({top:206,left:450});
-  $("#red-dot-2").offset({top:506,left:850});
-  var slashingLine1 = {
-      upperEnd: [206, 450],
-      lowerEnd: [506, 850],
-      gradient: (506-206)/(850-450)
+  var redTop = $("#red-top").offset({top:206,left:450});
+  var redBottom = $("#red-bottom").offset({top:506,left:850});
+  var redLine = {
+      upperEnd: redTop.offset(),
+      lowerEnd: redBottom.offset(),
+      gradient: (redBottom.offset().top - redTop.offset().top) / (redBottom.offset().left - redTop.offset().left),
+      intercept: (redBottom.offset().top - redTop.offset().top) / (redBottom.offset().left - redTop.offset().left) * redBottom.offset().left - redBottom.offset().top
+      // (506-206)/(850-450)
     };
+  console.log(redLine);
+  pickPoint(redLine);
   $("body").on("keypress", keypressHandler);
 }
 
@@ -18,13 +22,21 @@ function keypressHandler(e){
 }
 
 function playGame(){
-  pickHeight();
+  pickPoint();
   pickSpeed();
   moveObject();
 }
 
-function pickHeight(){
-
+// may be add in some "margining" value to avoid near the end points
+function pickPoint(line){
+  // var margin = 30;
+  var dtop = Math.round(Math.random()*(line.lowerEnd.top - line.upperEnd.top));
+  var point = {
+    top: line.upperEnd.top + dtop,
+    left: ((line.upperEnd.top + dtop) + line.intercept) / line.gradient
+  }
+  console.log(point);
+  $(".test").offset(point);
 }
 
   /*define height and width of the tunnel*/
