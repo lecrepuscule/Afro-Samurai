@@ -111,14 +111,4 @@ function strike(point, line){
 
 
 
-  /*define height and width of the tunnel*/
-
-  /*define slashing line
-    slashingLine = {
-      upperEnd: []
-      lowerEnd: []
-      gradient: 
-    }
-  */
-
 
