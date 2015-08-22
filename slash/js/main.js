@@ -13,15 +13,17 @@ function initGame(){
       // (506-206)/(850-450)
     };
   var timeRange = [1000, 2000]
-  var distance = $(window).width()+50;
+  var distance = $(window).width()+30;
   console.log(redLine);
   //start the game 
   var point = pickPoint(redLine);
+  var safeWord;
+  playGame(point, timeRange, distance, safeWord);
   $("body").on("keypress", function(e){
     e.preventDefault();
     console.log(e);
-    var startTime = Date.now();
-    playGame(point, timeRange, distance, startTime);
+    // var startTime = Date.now();
+    strike(point, safeWord);
   });
 }
 
@@ -71,22 +73,30 @@ function pickSpeed (point, time, distance){
 // }
 
 // setInterval is inaccurate, but for the purpose of this game, it may not be a blocker
-function moveObject(point, time, speed, distance, startTime){
+function moveObject(point, time, speed, distance, safeWord){
   $(".test").offset({left:distance});
   console.log("distance is " + distance);
-  var time0 = 0;
-  var moveObject = setInterval(function(){
+  // var time0 = 0;
+  safeWord = setInterval(function(){
     distance -= speed;
     $(".test").offset({left:distance});
-    console.log("each interval takes: " + (Date.now()-time0));
-    time0 = Date.now();
-    if ( Math.floor(distance - point.left) < 1) {
-      clearInterval(moveObject);
-      console.log("Total time lapse: " + (Date.now() - startTime));
+    if ( distance < -30) {
+      clearInterval(safeWord);
+      console.log("clear!");
     }
+    // console.log("this interval takes: " + (Date.now()-time0));
+    // time0 = Date.now();
+    // if ( Math.floor(distance - point.left) < 1) {
+    //   clearInterval(moveObject);
+    //   console.log("Total time lapse: " + (Date.now() - startTime));
+    // }
   }, 5);
 }
 
+function strike(point, safeWord){
+  var objectPosition = $(".test").offset().left;
+  Math.abs(objectPosition - point.left) < 30 ? console.log("Dead cat!") : console.log("miss!" + objectPosition);
+}
 
   /*define height and width of the tunnel*/
 
