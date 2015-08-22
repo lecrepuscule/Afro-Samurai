@@ -13,13 +13,15 @@ function initGame(){
       // (506-206)/(850-450)
     };
   var timeRange = [1000, 4000]
+  var distance = $(window).width()+50;
   console.log(redLine);
   //start the game 
   var point = pickPoint(redLine);
   $("body").on("keypress", function(e){
     e.preventDefault();
     console.log(e);
-    playGame(point, timeRange);
+    var startTime = Date.now();
+    playGame(point, timeRange, distance, startTime);
   });
 }
 
@@ -28,11 +30,10 @@ function initGame(){
 //   playGame();
 // }
 
-function playGame(point, timeRange){
+function playGame(point, timeRange, distance, startTime){
   var time = pickTime(timeRange);
-  var speed = pickSpeed(point, time, 1.44);
-  var distance = pickDistance(point, time, speed);
-  moveObject(point, time, speed, distance);
+  var speed = pickSpeed(point, time, distance);
+  moveObject(point, time, speed, distance, startTime);
 }
 
 // may be add in some "margining" value to avoid near the end points
@@ -50,36 +51,36 @@ function pickPoint(line){
 
 // to not let the flying object go past too fast or slow through the screen, an range is given to the time and speed, e.g. 1000 < time < 4000, 1430 > speed > 1430 /4 per 1000 ms
 function pickTime (timeRange){
-  var time = Math.round(Math.random()*timeRange[1]) + timeRange[0];
+  var time = (Number((Math.random()*timeRange[1]).toFixed(0)) + timeRange[0]) / 5;
   console.log("time is: " + time);
   return time;
 }
 
-function pickSpeed (point, time, maxSpeed){
-  var minSpeed = ($(window).width() - point.left)/time;
-  var speed = Number((Math.random()*maxSpeed).toFixed(3)) + minSpeed;
+function pickSpeed (point, time, distance){
+  // var minSpeed = ($(window).width() - point.left)/time;
+  // var speed = Number((Math.random()*maxSpeed).toFixed(3)) + minSpeed;
+  var speed = (distance - point.left) /time;
   console.log("speed is: " + speed);
   return speed;
 }
 
-function pickDistance(point, time, speed){
-  var distance = speed * time + point.left;
-  console.log("distance: "+ distance);
-  return distance;
-}
+// function pickDistance(point, time, speed){
+//   var distance = speed * time + point.left;
+//   console.log("distance: "+ distance);
+//   return distance;
+// }
 
-function moveObject(point, time, speed, distance){
+function moveObject(point, time, speed, distance, startTime){
   $(".test").offset({left:distance});
-
+  console.log("distance is " + distance)
   var moveObject = setInterval(function(){
     distance -= speed;
     $(".test").offset({left:distance});
-  }, 1);
-
-  if (distance < 0) {
-    clearInterval(moveObject);
-    console.log("clear!");
-  }
+    if ( Math.floor(distance - point.left) < 1) {
+      clearInterval(moveObject);
+      console.log(Date.now() - startTime);
+    }
+  }, 5);
 }
 
 
