@@ -12,7 +12,7 @@ function initGame(){
       intercept: (redBottom.offset().top - redTop.offset().top) / (redBottom.offset().left - redTop.offset().left) * redBottom.offset().left - redBottom.offset().top
       // (506-206)/(850-450)
     };
-  var timeRange = [1000, 4000]
+  var timeRange = [1000, 2000]
   var distance = $(window).width()+50;
   console.log(redLine);
   //start the game 
@@ -51,7 +51,7 @@ function pickPoint(line){
 
 // to not let the flying object go past too fast or slow through the screen, an range is given to the time and speed, e.g. 1000 < time < 4000, 1430 > speed > 1430 /4 per 1000 ms
 function pickTime (timeRange){
-  var time = (Number((Math.random()*timeRange[1]).toFixed(0)) + timeRange[0]) / 5;
+  var time = (Number((Math.random()*(timeRange[1]-timeRange[0])).toFixed(0)) + timeRange[0]) / 5;
   console.log("time is: " + time);
   return time;
 }
@@ -70,15 +70,19 @@ function pickSpeed (point, time, distance){
 //   return distance;
 // }
 
+// setInterval is inaccurate, but for the purpose of this game, it may not be a blocker
 function moveObject(point, time, speed, distance, startTime){
   $(".test").offset({left:distance});
-  console.log("distance is " + distance)
+  console.log("distance is " + distance);
+  var time0 = 0;
   var moveObject = setInterval(function(){
     distance -= speed;
     $(".test").offset({left:distance});
+    console.log("each interval takes: " + (Date.now()-time0));
+    time0 = Date.now();
     if ( Math.floor(distance - point.left) < 1) {
       clearInterval(moveObject);
-      console.log(Date.now() - startTime);
+      console.log("Total time lapse: " + (Date.now() - startTime));
     }
   }, 5);
 }
