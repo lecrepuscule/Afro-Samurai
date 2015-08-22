@@ -23,7 +23,7 @@ function initGame(){
     e.preventDefault();
     console.log(e);
     // var startTime = Date.now();
-    strike(point, safeWord);
+    strike(point, redLine);
   });
 }
 
@@ -93,9 +93,12 @@ function moveObject(point, time, speed, distance, safeWord){
   }, 5);
 }
 
-function strike(point, safeWord){
-  var objectPosition = $(".test").offset().left;
-  Math.abs(objectPosition - point.left) < 30 ? console.log("Dead cat!") : console.log("miss!" + objectPosition);
+function strike(point, line){
+  var x = $(".test").offset().left;
+  var y = $(".test").offset().top;
+  var striked = (y + line.intercept) / x;
+  Math.abs(striked - line.gradient) < 0.03 ? console.log("Dead cat!") : console.log("miss!" + striked);
+  // Math.abs(objectPosition - point.left) < 30 ? console.log("Dead cat!") : console.log("miss!" + objectPosition);
 }
 
   /*define height and width of the tunnel*/
