@@ -3,7 +3,7 @@ $(document).ready(function(){
 })
 
 function initGame(){
-  var accuracy = 0.06; //the margin in radian that counts as a successful strike
+  var accuracy = 20; //the error margin that counts as a successful strike
   var timeRange = [1000, 2000]; //determines how long it takes for the flying objects to traverse the screen
   var maxDistance = $(window).width()/3; //determines how fast the objects fly
 

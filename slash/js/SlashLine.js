@@ -45,8 +45,8 @@ SlashLine = {
     $.each(flyingObjects, function(index, flyingObject){
       var x = flyingObject.physicalBody.offset().left;
       var y = flyingObject.physicalBody.offset().top;
-      var striked = (y + lineIntercept) / x;
-      (Math.abs(striked - lineGradient) < accuracy) ? console.log("Dead cat!") : console.log("miss!" + striked);
+      var striked = (y + lineIntercept) / lineGradient;
+      (Math.abs(striked - x) < accuracy) ? console.log("Dead cat!") : console.log("miss! " + (striked-x));
     })
   }
 }
