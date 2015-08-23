@@ -40,13 +40,6 @@ function initGame(){
   var yellowBottom = $("#yellow-bottom").offset({top:506,left:900});
 
   slashLines = setupSlashLines(slashLines);
-  // var redLine = Object.create(SlashLine);
-  // redLine.upperEnd = redTop.offset();
-  // redLine.lowerEnd = redBottom.offset();
-  // redLine.gradient = (redBottom.offset().top - redTop.offset().top) / (redBottom.offset().left - redTop.offset().left);
-  // redLine.intercept = (redBottom.offset().top - redTop.offset().top) / (redBottom.offset().left - redTop.offset().left) * redBottom.offset().left - redBottom.offset().top;
-      // (506-206)/(850-450)
-  // console.log(redLine);
 
   var slashLine = pickLines(slashLines);
   console.log("the line is: " + slashLine.id);
@@ -58,7 +51,7 @@ function initGame(){
     console.log(e);
     // var startTime = Date.now();
     var strikeLine = findLine(e, slashLines);
-    strikeLine.strike(flyingObjects, accuracy);
+    flyingObjects = strikeLine.strike(flyingObjects, accuracy);
   });
 
   var safeWord = setInterval(function(){

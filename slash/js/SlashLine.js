@@ -43,21 +43,51 @@ SlashLine = {
     var lineIntercept = this.intercept;
     var lineGradient = this.gradient;
     this.drawLine();
-    $.each(flyingObjects, function(index, flyingObject){
+
+    for (i=0; i< flyingObjects.length; i++){
       var x = flyingObject.physicalBody.offset().left;
       var y = flyingObject.physicalBody.offset().top;
       var striked = (y + lineIntercept) / lineGradient;
-      (Math.abs(striked - x) < accuracy) ? console.log("Dead cat!") : console.log("miss! " + (striked-x));
-    })
+
+      if (Math.abs(striked - x) < accuracy) {
+        flyingObjects[i].physicalBody.attr("class", "striked");
+        flyingObjects.splice(i,1);  //removing element inside the loop causes the array to shrink, this needs to be handled differently
+        i--;
+        console.log("Dead cat!");
+      } 
+      else {
+        console.log("miss! " + (striked-x));
+      }
+    }
+
+    // $.each(flyingObjects, function(index, flyingObject){
+    //   var x = flyingObject.physicalBody.offset().left;
+    //   var y = flyingObject.physicalBody.offset().top;
+    //   var striked = (y + lineIntercept) / lineGradient;
+
+    //   if (Math.abs(striked - x) < accuracy) {
+    //     flyingObject.physicalBody.attr("class", "striked");
+    //     flyingObjects.splice(index,1);  //removing element inside the loop causes the array to shrink, this needs to be handled differently
+    //     console.log("Dead cat!");
+    //   } 
+    //   else {
+    //     console.log("miss! " + (striked-x));
+    //   }
+    // })
+    return flyingObjects;
   },
 
   drawLine: function() {
     var c = $("#canvas")[0];
     var ctx = c.getContext("2d");
+    ctx.save();
     ctx.moveTo(this.upperEnd.left + 15,0);
     ctx.lineTo(this.lowerEnd.left + 15,300);
     ctx.lineWidth = 10;
     // ctx.strokeStyle = 'red';
     ctx.stroke();
+    ctx.restore();
+    // setTimeout(ctx.restore, 1000);
   }
+
 }
