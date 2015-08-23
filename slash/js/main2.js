@@ -36,24 +36,25 @@ function initGame(){
   var yellowTop = $("#yellow-top").offset({top:206,left:950});
   var yellowBottom = $("#yellow-bottom").offset({top:506,left:900});
 
-  var redLine = Object.create(SlashLine);
-  redLine.upperEnd = redTop.offset();
-  redLine.lowerEnd = redBottom.offset();
-  redLine.gradient = (redBottom.offset().top - redTop.offset().top) / (redBottom.offset().left - redTop.offset().left);
-  redLine.intercept = (redBottom.offset().top - redTop.offset().top) / (redBottom.offset().left - redTop.offset().left) * redBottom.offset().left - redBottom.offset().top;
+  slashLines = setupSlashLines(slashLines);
+  // var redLine = Object.create(SlashLine);
+  // redLine.upperEnd = redTop.offset();
+  // redLine.lowerEnd = redBottom.offset();
+  // redLine.gradient = (redBottom.offset().top - redTop.offset().top) / (redBottom.offset().left - redTop.offset().left);
+  // redLine.intercept = (redBottom.offset().top - redTop.offset().top) / (redBottom.offset().left - redTop.offset().left) * redBottom.offset().left - redBottom.offset().top;
       // (506-206)/(850-450)
-  console.log(redLine);
+  // console.log(redLine);
 
   var timeRange = [1000, 2000];
   var maxDistance = $(window).width()/3;
-  var flyingObjects = redLine.generateObjects(timeRange, maxDistance);
+  var flyingObjects = slashLines.redLine.line.generateObjects(timeRange, maxDistance);
   console.log(flyingObjects);
 
   $("body").on("keypress", function(e){
     e.preventDefault();
     console.log(e);
     // var startTime = Date.now();
-    redLine.strike(flyingObjects, accuracy);
+    slashLines.redLine.line.strike(flyingObjects, accuracy);
   });
 
   var safeWord = setInterval(function(){
@@ -67,8 +68,12 @@ function initGame(){
 }
 
 function setupSlashLines(slashLines){
-  $each(slashLines, function(key, value){
-    slashLines.key = Object.create(SlashLine);
+  $.each(slashLines, function(key, value){
+    value.line = Object.create(SlashLine);
+    value.line.upperEnd = value.upperEnd;
+    value.line.lowerEnd = value.lowerEnd;
+    value.line.gradient = (value.lowerEnd.top - value.upperEnd.top) / (value.lowerEnd.left - value.upperEnd.left);
+    value.line.intercept = value.line.gradient * value.lowerEnd.left - value.lowerEnd.top;
   })
   return slashLines;
 }
