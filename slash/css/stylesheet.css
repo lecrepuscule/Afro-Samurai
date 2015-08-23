@@ -14,10 +14,9 @@
   background-size: cover;
 }
 
-.flying-object {
+.test {
   height: 30px;
   width: 30px;
   background-image: url("../images/walking-cat.gif");
   background-size: cover;
-  display: inline-block;
 }
