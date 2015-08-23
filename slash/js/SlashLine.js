@@ -45,13 +45,13 @@ SlashLine = {
     this.drawLine();
 
     for (i=0; i< flyingObjects.length; i++){
-      var x = flyingObject.physicalBody.offset().left;
-      var y = flyingObject.physicalBody.offset().top;
+      var x = flyingObjects[i].physicalBody.offset().left;
+      var y = flyingObjects[i].physicalBody.offset().top;
       var striked = (y + lineIntercept) / lineGradient;
 
       if (Math.abs(striked - x) < accuracy) {
         flyingObjects[i].physicalBody.attr("class", "striked");
-        flyingObjects.splice(i,1);  //removing element inside the loop causes the array to shrink, this needs to be handled differently
+        flyingObjects.splice(i,1);
         i--;
         console.log("Dead cat!");
       } 
@@ -67,7 +67,7 @@ SlashLine = {
 
     //   if (Math.abs(striked - x) < accuracy) {
     //     flyingObject.physicalBody.attr("class", "striked");
-    //     flyingObjects.splice(index,1);  //removing element inside the loop causes the array to shrink, this needs to be handled differently
+    //     strikedDown.push(flyingObject);
     //     console.log("Dead cat!");
     //   } 
     //   else {

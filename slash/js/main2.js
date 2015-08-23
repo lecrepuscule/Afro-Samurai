@@ -3,7 +3,7 @@ $(document).ready(function(){
 })
 
 function initGame(){
-  var accuracy = 20; //the error margin that counts as a successful strike
+  var accuracy = 40; //the error margin that counts as a successful strike
   var timeRange = [1000, 2000]; //determines how long it takes for the flying objects to traverse the screen
   var maxDistance = $(window).width()/3; //determines how fast the objects fly
 
@@ -55,11 +55,15 @@ function initGame(){
   });
 
   var safeWord = setInterval(function(){
+    // $.each(strikedDown, function(index, value){
+    //   var toBeRemoved = flyingObjects.indexOf(value);
+    //   if (toBeRemoved !== -1){
+    //     console.log("it has been removed");
+    //     flyingObjects.splice(toBeRemoved, 1);
+    //   }
+    // })
     $.each(flyingObjects, function(index, flyingObject){
       flyingObject.fly(safeWord);
-      // if (Math.abs(flyingObject.distance - flyingObject.origin[1]) < 2) {
-      //   clearInterval(safeWord);
-      // }
     })
   },5);
 }
