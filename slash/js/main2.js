@@ -6,6 +6,8 @@ function initGame(){
   var accuracy = 40; //the error margin that counts as a successful strike
   var timeRange = [1000, 2000]; //determines how long it takes for the flying objects to traverse the screen
   var maxDistance = $(window).width()/3; //determines how fast the objects fly
+  var score = 0;
+  var life = 3;
 
   var slashLines = {
     redLine: {
@@ -51,17 +53,14 @@ function initGame(){
     console.log(e);
     // var startTime = Date.now();
     var strikeLine = findLine(e, slashLines);
-    flyingObjects = strikeLine.strike(flyingObjects, accuracy);
+    results = strikeLine.strike(flyingObjects, accuracy, score, life);
+    console.log(results);
+    flyingObjects = results[0];
+    score = results[1];
+    life = results[2];
   });
 
   var safeWord = setInterval(function(){
-    // $.each(strikedDown, function(index, value){
-    //   var toBeRemoved = flyingObjects.indexOf(value);
-    //   if (toBeRemoved !== -1){
-    //     console.log("it has been removed");
-    //     flyingObjects.splice(toBeRemoved, 1);
-    //   }
-    // })
     $.each(flyingObjects, function(index, flyingObject){
       flyingObject.fly(safeWord);
     })
