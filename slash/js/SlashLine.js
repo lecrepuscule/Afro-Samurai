@@ -32,9 +32,9 @@ SlashLine = {
   },
 
   generateOrigin: function(){
-    // var margin = 30;
-    var dtop = Math.round(Math.random()*(this.lowerEnd.top - this.upperEnd.top));
-    var origin = [this.upperEnd.top + dtop, ((this.upperEnd.top + dtop) + this.intercept) / this.gradient];
+    var margin = 30;
+    var dtop = Math.round(Math.random()*(this.lowerEnd.top - this.upperEnd.top - margin*2));
+    var origin = [this.upperEnd.top + dtop + margin, ((this.upperEnd.top + dtop + margin) + this.intercept) / this.gradient];
     // console.log(origin);
     return origin;
   },
