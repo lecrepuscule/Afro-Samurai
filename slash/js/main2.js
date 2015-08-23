@@ -57,7 +57,9 @@ function initGame(){
     e.preventDefault();
     console.log(e);
     // var startTime = Date.now();
-    slashLines.redLine.line.strike(flyingObjects, accuracy);
+    var strikeLine = findLine(e, slashLines);
+    console.log("striking line is: " + strikeLine);
+    strikeLine.strike(flyingObjects, accuracy);
   });
 
   var safeWord = setInterval(function(){
@@ -95,3 +97,21 @@ function pickLines(slashLines){
       return slashLines.yellowLine.line;
   }
 }
+
+function findLine(e, slashLines){
+  console.log(slashLines);
+  console.log(e.keyCode);
+  switch(e.keyCode){
+    case 114:
+      return slashLines.redLine.line;
+    case 103:
+      return slashLines.greenLine.line;
+    case 98:
+      return slashLines.blueLine.line;
+    case 121:
+      return slashLines.yellowLine.line;
+    default:
+      console.log("wrong button!")
+  }
+}
+

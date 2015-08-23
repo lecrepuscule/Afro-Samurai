@@ -9,7 +9,7 @@ SlashLine = {
   intercept: null,
   
   pickTime: function(timeRange){
-    var time = (Number((Math.random()*(timeRange[1]-timeRange[0])).toFixed(0)) + timeRange[0]) / 5;
+    var time = (Number((Math.random()*(timeRange[1]-timeRange[0])).toFixed(0)) + timeRange[0]) / 5; // using 5ms as the unit to accommodate minimum delay in setInterval in js
     // console.log("time is: " + time);
     return time;
   },
