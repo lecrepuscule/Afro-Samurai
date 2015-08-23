@@ -10,8 +10,23 @@
 .dots {
   height: 30px;
   width: 30px;
-  background-image: url("../images/red-dot.png");
   background-size: cover;
+}
+
+.red-dots {
+  background-image: url("../images/red-dot.png");
+}
+
+.blue-dots {
+  background-image: url("../images/blue-dot.png");
+}
+
+.green-dots {
+  background-image: url("../images/green-dot.png");
+}
+
+.yellow-dots {
+  background-image: url("../images/yellow-dot.png");
 }
 
 .flying-object {
@@ -19,4 +34,8 @@
   width: 30px;
   background-image: url("../images/walking-cat.gif");
   background-size: cover;
+}
+
+.striked {
+  display: none;
 }

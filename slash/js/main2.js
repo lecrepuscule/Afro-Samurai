@@ -4,8 +4,38 @@ $(document).ready(function(){
 
 function initGame(){
   var accuracy = 0.1; //the margin in radian that counts as a successful strike
-  var redTop = $("#red-top").offset({top:206,left:450});
-  var redBottom = $("#red-bottom").offset({top:506,left:850});
+  var slashLines = {
+    redLine: {
+      line: null,
+      upperEnd: {top:206,left:350},
+      lowerEnd: {top:506,left:1000}
+    },
+    greenLine: {
+      line: null,
+      upperEnd: {top:206,left:800},
+      lowerEnd: {top:506,left:500}
+    },  
+    blueLine: {
+      line: null,
+      upperEnd: {top:206,left:550},
+      lowerEnd: {top:506,left:700}
+    },  
+    yellowLine: {
+      line: null,
+      upperEnd: {top:206,left:950},
+      lowerEnd: {top:506,left:900}
+    }
+  };
+
+  var redTop = $("#red-top").offset({top:206,left:350});
+  var redBottom = $("#red-bottom").offset({top:506,left:1000});
+  var greenTop = $("#green-top").offset({top:206,left:800});
+  var greenBottom = $("#green-bottom").offset({top:506,left:500});
+  var blueTop = $("#blue-top").offset({top:206,left:550});
+  var blueBottom = $("#blue-bottom").offset({top:506,left:700});
+  var yellowTop = $("#yellow-top").offset({top:206,left:950});
+  var yellowBottom = $("#yellow-bottom").offset({top:506,left:900});
+
   var redLine = Object.create(SlashLine);
   redLine.upperEnd = redTop.offset();
   redLine.lowerEnd = redBottom.offset();
@@ -35,3 +65,11 @@ function initGame(){
     })
   },5);
 }
+
+function setupSlashLines(slashLines){
+  $each(slashLines, function(key, value){
+    slashLines.key = Object.create(SlashLine);
+  })
+  return slashLines;
+}
+
