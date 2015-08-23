@@ -29,10 +29,10 @@ function initGame(){
   // });
   var safeWord = setInterval(function(){
     $.each(flyingObjects, function(index, flyingObject){
-      flyingObject.fly();
-      if (Math.abs(flyingObject.distance - flyingObject.origin[1]) < 2) {
-        clearInterval(safeWord);
-      }
+      flyingObject.fly(safeWord);
+      // if (Math.abs(flyingObject.distance - flyingObject.origin[1]) < 2) {
+      //   clearInterval(safeWord);
+      // }
     })
   },5);
 }

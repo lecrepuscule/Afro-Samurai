@@ -39,9 +39,15 @@ FlyingObject = {
     return this.distance;
   },
 
-  fly: function(){
+  fly: function(safeWord){
     this.distance -= this.speed;
     // this.direction ? (this.distance-this.speed) : (this.distance+this.speed);
     this.physicalBody.offset({left : this.distance});
+    if (this.direction && this.distance < -500) {
+      clearInterval(safeWord);
+    }
+    else if (this.direction === 0 && this.distance > ($(window).width()+500)){
+      clearInterval(safeWord);
+    }
   } 
 }
