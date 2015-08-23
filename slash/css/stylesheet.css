@@ -19,4 +19,5 @@
   width: 30px;
   background-image: url("../images/walking-cat.gif");
   background-size: cover;
+  display: inline-block;
 }

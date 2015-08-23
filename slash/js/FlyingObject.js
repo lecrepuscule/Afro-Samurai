@@ -8,11 +8,15 @@ FlyingObject = {
   speed: null,
   direction: null,
   distance: null,
-  body: null,
+  physicalBody: null,
 
   materialise: function(){
-    this.body = $("<div class='flying-object'></div>").attr("id",this.id);
-    this.body.offset({top : this.origin[0], left : this.distance});
+    var position = {top: this.origin[0], left: this.distance}
+    this.physicalBody = $("<div class='flying-object'></div>").attr("id","object-"+this.id);
+    this.physicalBody.appendTo(".game-space");
+    this.physicalBody.offset(position);
+    console.log("the distance has become: "+ this.distance);
+    console.log(this.physicalBody);
   },
 
   // pickTime: function(timeRange){
@@ -23,20 +27,22 @@ FlyingObject = {
 
   pickSpeed: function(){
     this.speed = this.distance / this.time;
-    console.log("speed is: " + this.speed);
+    console.log("the speed is: " + this.speed);
     return this.speed;
   },
 
   pickDisplacement: function(maxDistance){
     this.direction = Math.floor(Math.random()*2);
-    var randomDistance = (Number((Math.random()*maxDistance).toFixed(0));
-    this.distance = direction ? randomDistance + ($(window).width - this.origin[1]) : -randomDistance - this.origin[1];
+    var randomDistance = Number((Math.random()*maxDistance).toFixed(0));
+    this.distance = this.direction ? (randomDistance + ($(window).width() - this.origin[1])) : (-randomDistance - this.origin[1]);
+    console.log("the distance is: "+ this.distance);
     return this.distance;
   },
 
   fly: function(){
-    console.log("distance is " + this.distance);
-    this.distance += (this.direction ? -this.speed : this.speed);
-    this.body.offset({left : this.distance});
+    // console.log("distance is " + this.distance);
+    this.distance -= this.speed;
+    // this.direction ? (this.distance-this.speed) : (this.distance+this.speed);
+    this.physicalBody.offset({left : this.distance});
   } 
 }
