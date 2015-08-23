@@ -19,12 +19,6 @@ FlyingObject = {
     console.log(this.physicalBody);
   },
 
-  // pickTime: function(timeRange){
-  //   this.time = (Number((Math.random()*(timeRange[1]-timeRange[0])).toFixed(0)) + timeRange[0]) / 5;
-  //   console.log("time is: " + this.time);
-  //   return this.time;
-  // },
-
   pickSpeed: function(){
     this.speed = (this.distance - this.origin[1]) / this.time;
     console.log("the speed is: " + this.speed);
@@ -42,7 +36,6 @@ FlyingObject = {
 //added temporary stop conditions to prevent overloading the browser, this should be improved in the real game
   fly: function(safeWord){
     this.distance -= this.speed;
-    // this.direction ? (this.distance-this.speed) : (this.distance+this.speed);
     this.physicalBody.offset({left : this.distance});
     if (this.direction && this.distance < -500) {
       clearInterval(safeWord);

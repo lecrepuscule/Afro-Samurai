@@ -3,7 +3,10 @@ $(document).ready(function(){
 })
 
 function initGame(){
-  var accuracy = 0.1; //the margin in radian that counts as a successful strike
+  var accuracy = 0.06; //the margin in radian that counts as a successful strike
+  var timeRange = [1000, 2000]; //determines how long it takes for the flying objects to traverse the screen
+  var maxDistance = $(window).width()/3; //determines how fast the objects fly
+
   var slashLines = {
     redLine: {
       line: null,
@@ -45,9 +48,9 @@ function initGame(){
       // (506-206)/(850-450)
   // console.log(redLine);
 
-  var timeRange = [1000, 2000];
-  var maxDistance = $(window).width()/3;
-  var flyingObjects = slashLines.redLine.line.generateObjects(timeRange, maxDistance);
+  var slashLine = pickLines(slashLines);
+  console.log("the line is: " + slashLine.id);
+  var flyingObjects = slashLine.generateObjects(timeRange, maxDistance);
   console.log(flyingObjects);
 
   $("body").on("keypress", function(e){
@@ -70,6 +73,7 @@ function initGame(){
 function setupSlashLines(slashLines){
   $.each(slashLines, function(key, value){
     value.line = Object.create(SlashLine);
+    value.line.id = key;
     value.line.upperEnd = value.upperEnd;
     value.line.lowerEnd = value.lowerEnd;
     value.line.gradient = (value.lowerEnd.top - value.upperEnd.top) / (value.lowerEnd.left - value.upperEnd.left);
@@ -78,3 +82,16 @@ function setupSlashLines(slashLines){
   return slashLines;
 }
 
+function pickLines(slashLines){
+  lineIndex = Math.ceil(Math.random()*4);
+  switch (lineIndex){
+    case 1:
+      return slashLines.redLine.line;
+    case 2:
+      return slashLines.greenLine.line;
+    case 3:
+      return slashLines.blueLine.line;
+    case 4:
+      return slashLines.yellowLine.line;
+  }
+}
