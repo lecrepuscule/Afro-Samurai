@@ -3,6 +3,7 @@ $(document).ready(function(){
 })
 
 function initGame(){
+  var accuracy = 0.1; //the margin in radian that counts as a successful strike
   var redTop = $("#red-top").offset({top:206,left:450});
   var redBottom = $("#red-bottom").offset({top:506,left:850});
   var redLine = Object.create(SlashLine);
@@ -22,7 +23,7 @@ function initGame(){
     e.preventDefault();
     console.log(e);
     // var startTime = Date.now();
-    redLine.strike(flyingObjects);
+    redLine.strike(flyingObjects, accuracy);
   });
 
   var safeWord = setInterval(function(){

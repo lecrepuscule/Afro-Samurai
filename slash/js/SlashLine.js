@@ -39,14 +39,14 @@ SlashLine = {
     return origin;
   },
 
-  strike: function(flyingObjects){
+  strike: function(flyingObjects, accuracy){
     var lineIntercept = this.intercept;
     var lineGradient = this.gradient;
     $.each(flyingObjects, function(index, flyingObject){
       var x = flyingObject.physicalBody.offset().left;
       var y = flyingObject.physicalBody.offset().top;
       var striked = (y + lineIntercept) / x;
-      (Math.abs(striked - lineGradient) < 0.1) ? console.log("Dead cat!") : console.log("miss!" + striked);
+      (Math.abs(striked - lineGradient) < accuracy) ? console.log("Dead cat!") : console.log("miss!" + striked);
     })
   }
 }
