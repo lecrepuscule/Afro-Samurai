@@ -3,13 +3,11 @@ var SlashLine = SlashLine || {};
 SlashLine = {
 
   id: null,
-  definition : {
-      upperEnd: null,
-      lowerEnd: null,
-      gradient: null,
-      intercept: null
-  },
-
+  upperEnd: null,
+  lowerEnd: null,
+  gradient: null,
+  intercept: null,
+  
   pickTime: function(timeRange){
     var time = (Number((Math.random()*(timeRange[1]-timeRange[0])).toFixed(0)) + timeRange[0]) / 5;
     // console.log("time is: " + time);
@@ -42,11 +40,13 @@ SlashLine = {
   },
 
   strike: function(flyingObjects){
+    var lineIntercept = this.intercept;
+    var lineGradient = this.gradient;
     $.each(flyingObjects, function(index, flyingObject){
       var x = flyingObject.physicalBody.offset().left;
       var y = flyingObject.physicalBody.offset().top;
-      var striked = (y + this.intercept) / x;
-      Math.abs(striked - this.gradient) < 0.04 ? console.log("Dead cat!") : console.log("miss!" + striked);
+      var striked = (y + lineIntercept) / x;
+      (Math.abs(striked - lineGradient) < 0.1) ? console.log("Dead cat!") : console.log("miss!" + striked);
     })
   }
 }

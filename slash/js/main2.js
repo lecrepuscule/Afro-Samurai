@@ -17,16 +17,14 @@ function initGame(){
   var maxDistance = $(window).width()/3;
   var flyingObjects = redLine.generateObjects(timeRange, maxDistance);
   console.log(flyingObjects);
-  // $.each(flyingObjects, function(index, flyingObject){
-  //   flyingObject.fly();
-  //   console.log(flyingObject);
-  // })
-  // $("body").on("keypress", function(e){
-  //   e.preventDefault();
-  //   console.log(e);
-  //   // var startTime = Date.now();
-  //   redLine.strike(flyingObjects);
-  // });
+
+  $("body").on("keypress", function(e){
+    e.preventDefault();
+    console.log(e);
+    // var startTime = Date.now();
+    redLine.strike(flyingObjects);
+  });
+
   var safeWord = setInterval(function(){
     $.each(flyingObjects, function(index, flyingObject){
       flyingObject.fly(safeWord);

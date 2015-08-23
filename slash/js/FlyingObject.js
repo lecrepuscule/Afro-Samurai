@@ -39,6 +39,7 @@ FlyingObject = {
     return this.distance;
   },
 
+//added temporary stop conditions to prevent overloading the browser, this should be improved in the real game
   fly: function(safeWord){
     this.distance -= this.speed;
     // this.direction ? (this.distance-this.speed) : (this.distance+this.speed);
