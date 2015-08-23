@@ -18,7 +18,7 @@ function initGame(){
   //start the game 
   var point = pickPoint(redLine);
   var safeWord;
-  playGame(point, timeRange, distance, safeWord);
+  // playGame(point, timeRange, distance, safeWord);
   $("body").on("keypress", function(e){
     e.preventDefault();
     console.log(e);
@@ -40,15 +40,22 @@ function playGame(point, timeRange, distance, startTime){
 
 // may be add in some "margining" value to avoid near the end points
 function pickPoint(line){
-  // var margin = 30;
-  var dtop = Math.round(Math.random()*(line.lowerEnd.top - line.upperEnd.top));
-  var point = {
-    top: line.upperEnd.top + dtop,
-    left: ((line.upperEnd.top + dtop) + line.intercept) / line.gradient
+  var numOfPoints = Math.ceil(Math.random()*4);
+  var points = [];
+  for (i=1; i<= numOfPoints; i++){
+    var dtop = Math.round(Math.random()*(line.lowerEnd.top - line.upperEnd.top));
+    var point = {
+      top: line.upperEnd.top + dtop,
+      left: ((line.upperEnd.top + dtop) + line.intercept) / line.gradient
+    }
+    console.log(point);
+    var newObj = $("<div class='test'></div>").attr("id","object-"+i);
+    newObj.appendTo(".game-space");
+    newObj.offset(point);
+    // $(".test").offset(point);
+    points.push(point);
   }
-  console.log(point);
-  $(".test").offset(point);
-  return point;
+  return points;
 }
 
 // to not let the flying object go past too fast or slow through the screen, an range is given to the time and speed, e.g. 1000 < time < 4000, 1430 > speed > 1430 /4 per 1000 ms

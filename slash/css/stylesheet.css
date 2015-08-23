@@ -14,7 +14,7 @@
   background-size: cover;
 }
 
-.test {
+.flying-object {
   height: 30px;
   width: 30px;
   background-image: url("../images/walking-cat.gif");

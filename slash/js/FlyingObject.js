@@ -11,7 +11,7 @@ FlyingObject = {
   physicalBody: null,
 
   materialise: function(){
-    var position = {top: this.origin[0], left: this.distance}
+    var position = {top: this.origin[0], left: this.origin[1]}
     this.physicalBody = $("<div class='flying-object'></div>").attr("id","object-"+this.id);
     this.physicalBody.appendTo(".game-space");
     this.physicalBody.offset(position);
@@ -26,21 +26,20 @@ FlyingObject = {
   // },
 
   pickSpeed: function(){
-    this.speed = this.distance / this.time;
+    this.speed = (this.distance - this.origin[1]) / this.time;
     console.log("the speed is: " + this.speed);
     return this.speed;
   },
 
   pickDisplacement: function(maxDistance){
     this.direction = Math.floor(Math.random()*2);
-    var randomDistance = Number((Math.random()*maxDistance).toFixed(0));
-    this.distance = this.direction ? (randomDistance + ($(window).width() - this.origin[1])) : (-randomDistance - this.origin[1]);
+    var randomDistance = Math.ceil(Math.random()*maxDistance);
+    this.distance = this.direction ? (randomDistance + $(window).width()) : -randomDistance;
     console.log("the distance is: "+ this.distance);
     return this.distance;
   },
 
   fly: function(){
-    // console.log("distance is " + this.distance);
     this.distance -= this.speed;
     // this.direction ? (this.distance-this.speed) : (this.distance+this.speed);
     this.physicalBody.offset({left : this.distance});
