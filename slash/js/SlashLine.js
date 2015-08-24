@@ -82,16 +82,19 @@ SlashLine = {
   },
 
   drawLine: function() {
-    var c = $("#canvas")[0];
-    var ctx = c.getContext("2d");
-    ctx.save();
+    // var c = $("<canvas id='canvas' height='300' width='1440'></canvas>");
+    // c.prependTo($(".game-space"));
+    // debugger;
+    var c = $("#canvas");
+    var ctx = c[0].getContext("2d");
     ctx.moveTo(this.upperEnd.left + 15,0);
     ctx.lineTo(this.lowerEnd.left + 15,300);
     ctx.lineWidth = 10;
     // ctx.strokeStyle = 'red';
     ctx.stroke();
-    ctx.restore();
-    // setTimeout(ctx.restore, 1000);
+    setTimeout(function(){
+      c.replaceWith("<canvas id='canvas' height='300' width='1440'></canvas>");
+    }, 1000);
   }
 
 }

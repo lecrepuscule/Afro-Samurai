@@ -8,6 +8,7 @@ function initGame(){
   var maxDistance = $(window).width()/3; //determines how fast the objects fly
   var score = 0;
   var life = 3;
+  var results = null;
 
   var slashLines = {
     redLine: {
@@ -98,19 +99,28 @@ function findLine(e, slashLines){
   console.log(e.keyCode);
   switch(e.keyCode){
     case 114:
-      $("#canvas")[0].getContext("2d").strokeStyle="red";
+      // $("#canvas")[0].getContext("2d").strokeStyle="red";
       return slashLines.redLine.line;
     case 103:
-      $("#canvas")[0].getContext("2d").strokeStyle="green";
+      // $("#canvas")[0].getContext("2d").strokeStyle="green";
       return slashLines.greenLine.line;
     case 98:
-      $("#canvas")[0].getContext("2d").strokeStyle="blue";
+      // $("#canvas")[0].getContext("2d").strokeStyle="blue";
       return slashLines.blueLine.line;
     case 121:
-      $("#canvas")[0].getContext("2d").strokeStyle="yellow";
+      // $("#canvas")[0].getContext("2d").strokeStyle="yellow";
       return slashLines.yellowLine.line;
     default:
       console.log("wrong button!")
   }
 }
+
+// function checkResults(results, score, life){
+//   if (results === null){
+//     life--;
+//   }
+//   else {
+    
+//   }
+// }
 
