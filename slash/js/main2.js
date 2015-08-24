@@ -12,34 +12,34 @@ function initGame(){
   var slashLines = {
     redLine: {
       line: null,
-      upperEnd: {top:206,left:350},
-      lowerEnd: {top:506,left:1000}
+      upperEnd: {top:228,left:350},
+      lowerEnd: {top:528,left:1000}
     },
     greenLine: {
       line: null,
-      upperEnd: {top:206,left:800},
-      lowerEnd: {top:506,left:500}
+      upperEnd: {top:228,left:800},
+      lowerEnd: {top:528,left:500}
     },  
     blueLine: {
       line: null,
-      upperEnd: {top:206,left:550},
-      lowerEnd: {top:506,left:700}
+      upperEnd: {top:228,left:550},
+      lowerEnd: {top:528,left:700}
     },  
     yellowLine: {
       line: null,
-      upperEnd: {top:206,left:950},
-      lowerEnd: {top:506,left:900}
+      upperEnd: {top:228,left:950},
+      lowerEnd: {top:528,left:900}
     }
   };
 
-  var redTop = $("#red-top").offset({top:206,left:350});
-  var redBottom = $("#red-bottom").offset({top:506,left:1000});
-  var greenTop = $("#green-top").offset({top:206,left:800});
-  var greenBottom = $("#green-bottom").offset({top:506,left:500});
-  var blueTop = $("#blue-top").offset({top:206,left:550});
-  var blueBottom = $("#blue-bottom").offset({top:506,left:700});
-  var yellowTop = $("#yellow-top").offset({top:206,left:950});
-  var yellowBottom = $("#yellow-bottom").offset({top:506,left:900});
+  var redTop = $("#red-top").offset({top:228,left:350});
+  var redBottom = $("#red-bottom").offset({top:528,left:1000});
+  var greenTop = $("#green-top").offset({top:228,left:800});
+  var greenBottom = $("#green-bottom").offset({top:528,left:500});
+  var blueTop = $("#blue-top").offset({top:228,left:550});
+  var blueBottom = $("#blue-bottom").offset({top:528,left:700});
+  var yellowTop = $("#yellow-top").offset({top:228,left:950});
+  var yellowBottom = $("#yellow-bottom").offset({top:528,left:900});
 
   slashLines = setupSlashLines(slashLines);
   playGame(slashLines, timeRange, maxDistance, accuracy, score, life);
@@ -114,15 +114,6 @@ function findLine(e, slashLines){
   }
 }
 
-function checkResults(results, score, life){
-  if (results === null){
-    life--;
-  }
-  else {
-    (life <= 0) ? endGame() : playGame();
-  }
-}
-
 function playGame(slashLines, timeRange, maxDistance, accuracy, score, life){
   var results = null;
   var slashLine = pickLines(slashLines);
@@ -147,6 +138,19 @@ function playGame(slashLines, timeRange, maxDistance, accuracy, score, life){
     })
   },5);
   return [score, life];
+}
+
+function checkResults(results, score, life){
+  if (results === null){
+    life--;
+  }
+  else {
+    (life <= 0) ? endGame() : playGame();
+  }
+}
+
+function displayOutcome(score, life){
+
 }
 
 function endGame(){
