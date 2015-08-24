@@ -94,7 +94,7 @@ SlashLine = {
     ctx.stroke();
     setTimeout(function(){
       c.replaceWith("<canvas id='canvas' height='300' width='1440'></canvas>");
-    }, 1000);
+    }, 500);
   }
 
 }

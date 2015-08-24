@@ -8,7 +8,6 @@ function initGame(){
   var maxDistance = $(window).width()/3; //determines how fast the objects fly
   var score = 0;
   var life = 3;
-  var results = null;
 
   var slashLines = {
     redLine: {
@@ -43,29 +42,29 @@ function initGame(){
   var yellowBottom = $("#yellow-bottom").offset({top:506,left:900});
 
   slashLines = setupSlashLines(slashLines);
+  playGame(slashLines, timeRange, maxDistance, accuracy, score, life);
+  // var slashLine = pickLines(slashLines);
+  // console.log("the line is: " + slashLine.id);
+  // var flyingObjects = slashLine.generateObjects(timeRange, maxDistance);
+  // console.log(flyingObjects);
 
-  var slashLine = pickLines(slashLines);
-  console.log("the line is: " + slashLine.id);
-  var flyingObjects = slashLine.generateObjects(timeRange, maxDistance);
-  console.log(flyingObjects);
+  // $("body").on("keypress", function(e){
+  //   e.preventDefault();
+  //   console.log(e);
+  //   // var startTime = Date.now();
+  //   var strikeLine = findLine(e, slashLines);
+  //   results = strikeLine.strike(flyingObjects, accuracy, score, life);
+  //   console.log(results);
+  //   flyingObjects = results[0];
+  //   score = results[1];
+  //   life = results[2];
+  // });
 
-  $("body").on("keypress", function(e){
-    e.preventDefault();
-    console.log(e);
-    // var startTime = Date.now();
-    var strikeLine = findLine(e, slashLines);
-    results = strikeLine.strike(flyingObjects, accuracy, score, life);
-    console.log(results);
-    flyingObjects = results[0];
-    score = results[1];
-    life = results[2];
-  });
-
-  var safeWord = setInterval(function(){
-    $.each(flyingObjects, function(index, flyingObject){
-      flyingObject.fly(safeWord);
-    })
-  },5);
+  // var safeWord = setInterval(function(){
+  //   $.each(flyingObjects, function(index, flyingObject){
+  //     flyingObject.fly(safeWord);
+  //   })
+  // },5);
 }
 
 function setupSlashLines(slashLines){
@@ -115,12 +114,44 @@ function findLine(e, slashLines){
   }
 }
 
-// function checkResults(results, score, life){
-//   if (results === null){
-//     life--;
-//   }
-//   else {
-    
-//   }
-// }
+function checkResults(results, score, life){
+  if (results === null){
+    life--;
+  }
+  else {
+    (life <= 0) ? endGame() : playGame();
+  }
+}
+
+function playGame(slashLines, timeRange, maxDistance, accuracy, score, life){
+  var results = null;
+  var slashLine = pickLines(slashLines);
+  console.log("the line is: " + slashLine.id);
+  var flyingObjects = slashLine.generateObjects(timeRange, maxDistance);
+  console.log(flyingObjects);
+
+  $("body").on("keypress", function(e){
+    e.preventDefault();
+    console.log(e);
+    var strikeLine = findLine(e, slashLines);
+    results = strikeLine.strike(flyingObjects, accuracy, score, life);
+    console.log(results);
+    flyingObjects = results[0];
+    score = results[1];
+    life = results[2];
+  });
+
+  var safeWord = setInterval(function(){
+    $.each(flyingObjects, function(index, flyingObject){
+      flyingObject.fly(safeWord);
+    })
+  },5);
+  return [score, life];
+}
+
+function endGame(){
+  showWinner();
+}
+
+
 
