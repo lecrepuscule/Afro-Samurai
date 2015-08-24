@@ -95,10 +95,9 @@ function findLine(e, slashLines){
 function playGame(slashLines, timeRange, maxDistance, accuracy, scoreBoard){
   var results = null;
   var slashLine = pickLines(slashLines);
-  console.log("the line is: " + slashLine.id);
   var flyingObjects = slashLine.generateObjects(timeRange, maxDistance);
-  console.log(flyingObjects);
-  console.log("the scoreBoard is: " + scoreBoard);
+  var destroyedObjects = [];
+
 
   $("body").on("keypress", function(e){
     e.preventDefault();
@@ -121,14 +120,13 @@ function playGame(slashLines, timeRange, maxDistance, accuracy, scoreBoard){
       })
       if (!currentTurn){
         clearInterval(safeWord);
-        $.each(flyingObjects, function(index, flyingObject){
-          flyingObject.physicalBody.remove();
-        })
+        $('.flying-object').remove();
         scoreBoard = checkResults(results, scoreBoard, slashLines, timeRange, maxDistance, accuracy);
       }
     }
       else {
         clearInterval(safeWord);
+        $('.flying-object').remove();
         scoreBoard = checkResults(results, scoreBoard, slashLines, timeRange, maxDistance, accuracy);
       }
     },5)

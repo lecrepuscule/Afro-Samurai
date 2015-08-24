@@ -63,34 +63,15 @@ SlashLine = {
       }
     }
     bonus ? (scoreBoard[0] += 10*Math.pow(bonus,2)) : scoreBoard[1]--;
-
-    // $.each(flyingObjects, function(index, flyingObject){
-    //   var x = flyingObject.physicalBody.offset().left;
-    //   var y = flyingObject.physicalBody.offset().top;
-    //   var striked = (y + lineIntercept) / lineGradient;
-
-    //   if (Math.abs(striked - x) < accuracy) {
-    //     flyingObject.physicalBody.attr("class", "striked");
-    //     strikedDown.push(flyingObject);
-    //     console.log("Dead cat!");
-    //   } 
-    //   else {
-    //     console.log("miss! " + (striked-x));
-    //   }
-    // })
     return [scoreBoard, flyingObjects];
   },
 
   drawLine: function() {
-    // var c = $("<canvas id='canvas' height='300' width='1440'></canvas>");
-    // c.prependTo($(".game-space"));
-    // debugger;
     var c = $("#canvas");
     var ctx = c[0].getContext("2d");
     ctx.moveTo(this.upperEnd.left + 15,0);
     ctx.lineTo(this.lowerEnd.left + 15,300);
     ctx.lineWidth = 10;
-    // ctx.strokeStyle = 'red';
     ctx.stroke();
     setTimeout(function(){
       c.replaceWith("<canvas id='canvas' height='300' width='1440'></canvas>");
