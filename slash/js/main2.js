@@ -4,7 +4,7 @@ $(document).ready(function(){
 
 function initGame(){
   var accuracy = 40; //the error margin that counts as a successful strike
-  var timeRange = [5000, 6000]; //determines how long it takes for the flying objects to traverse the screen
+  var timeRange = [2000, 4000]; //determines how long it takes for the flying objects to traverse the screen
   var maxDistance = $(window).width()/3; //determines how fast the objects fly
   var scoreBoard = [0,3];
 
@@ -85,7 +85,7 @@ function findLine(e, slashLines){
       $("#canvas")[0].getContext("2d").strokeStyle="blue";
       return slashLines.blueLine.line;
     case 121:
-      $("#canvas")[0].getContext("2d").strokeStyle="yellow";
+      $("#canvas")[0].getContext("2d").strokeStyle="black";
       return slashLines.yellowLine.line;
     default:
       console.log("wrong button!")
