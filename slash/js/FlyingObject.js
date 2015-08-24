@@ -12,7 +12,7 @@ FlyingObject = {
 
   materialise: function(){
     var position = {top: this.origin[0], left: this.origin[1]}
-    this.physicalBody = $("<div class='flying-object'></div>").attr("id","object-"+this.id);
+    this.physicalBody = $("<div class='flying-object'>" + this.id + "</div>").attr("id","object-"+this.id);
     this.physicalBody.appendTo(".game-space");
     this.physicalBody.offset(position);
     console.log("the distance has become: "+ this.distance);

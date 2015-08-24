@@ -4,7 +4,7 @@ $(document).ready(function(){
 
 function initGame(){
   var accuracy = 40; //the error margin that counts as a successful strike
-  var timeRange = [2500, 4000]; //determines how long it takes for the flying objects to traverse the screen
+  var timeRange = [5000, 6000]; //determines how long it takes for the flying objects to traverse the screen
   var maxDistance = $(window).width()/3; //determines how fast the objects fly
   var scoreBoard = [0,3];
 
@@ -43,28 +43,6 @@ function initGame(){
 
   slashLines = setupSlashLines(slashLines);
   scoreBoard = playGame(slashLines, timeRange, maxDistance, accuracy, scoreBoard);
-  // var slashLine = pickLines(slashLines);
-  // console.log("the line is: " + slashLine.id);
-  // var flyingObjects = slashLine.generateObjects(timeRange, maxDistance);
-  // console.log(flyingObjects);
-
-  // $("body").on("keypress", function(e){
-  //   e.preventDefault();
-  //   console.log(e);
-  //   // var startTime = Date.now();
-  //   var strikeLine = findLine(e, slashLines);
-  //   results = strikeLine.strike(flyingObjects, accuracy, score, life);
-  //   console.log(results);
-  //   flyingObjects = results[0];
-  //   score = results[1];
-  //   life = results[2];
-  // });
-
-  // var safeWord = setInterval(function(){
-  //   $.each(flyingObjects, function(index, flyingObject){
-  //     flyingObject.fly(safeWord);
-  //   })
-  // },5);
 }
 
 function setupSlashLines(slashLines){
@@ -98,16 +76,16 @@ function findLine(e, slashLines){
   console.log(e.keyCode);
   switch(e.keyCode){
     case 114:
-      // $("#canvas")[0].getContext("2d").strokeStyle="red";
+      $("#canvas")[0].getContext("2d").strokeStyle="red";
       return slashLines.redLine.line;
     case 103:
-      // $("#canvas")[0].getContext("2d").strokeStyle="green";
+      $("#canvas")[0].getContext("2d").strokeStyle="green";
       return slashLines.greenLine.line;
     case 98:
-      // $("#canvas")[0].getContext("2d").strokeStyle="blue";
+      $("#canvas")[0].getContext("2d").strokeStyle="blue";
       return slashLines.blueLine.line;
     case 121:
-      // $("#canvas")[0].getContext("2d").strokeStyle="yellow";
+      $("#canvas")[0].getContext("2d").strokeStyle="yellow";
       return slashLines.yellowLine.line;
     default:
       console.log("wrong button!")
@@ -143,6 +121,9 @@ function playGame(slashLines, timeRange, maxDistance, accuracy, scoreBoard){
       })
       if (!currentTurn){
         clearInterval(safeWord);
+        $.each(flyingObjects, function(index, flyingObject){
+          flyingObject.physicalBody.remove();
+        })
         scoreBoard = checkResults(results, scoreBoard, slashLines, timeRange, maxDistance, accuracy);
       }
     }
@@ -151,19 +132,7 @@ function playGame(slashLines, timeRange, maxDistance, accuracy, scoreBoard){
         scoreBoard = checkResults(results, scoreBoard, slashLines, timeRange, maxDistance, accuracy);
       }
     },5)
-  //   {
-  //     clearInterval(safeWord);
-  //     scoreBoard = checkResults(results, scoreBoard, slashLines, timeRange, maxDistance, accuracy);
-  //   } 
-  //   $.each(flyingObjects, function(index, flyingObject){
-  //     flyingObject.fly(safeWord);
-  //     currentTurn += isOnScreen(flyingObject);
-  //   })
-  //   if (!currentTurn){
-  //     clearInterval(safeWord);
-  //     scoreBoard = checkResults(results, scoreBoard, slashLines, timeRange, maxDistance, accuracy);
-  //   }
-  // },5);
+
   return scoreBoard;
 }
 

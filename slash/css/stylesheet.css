@@ -70,3 +70,7 @@
 .striked {
   display: none;
 }
+
+.invisible {
+  opacity: 0;
+}
