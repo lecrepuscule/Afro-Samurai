@@ -7,7 +7,14 @@ body {
   text-align: center;
   font-size: 80px;
   font-family: cursive;
-  margin-bottom: 35px;
+  margin: 0 auto 0 auto;
+}
+
+.final-score {
+  display: inherit;
+  text-align: center;
+  font-size: 60px;
+  margin-bottom: 25px;
 }
 
 #replay-button {

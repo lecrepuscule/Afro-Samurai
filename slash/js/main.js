@@ -158,6 +158,8 @@ function endGame(scoreBoard){
   var gameSpace = $(".game-space");
   gameSpace.empty();
   $("<h1 class='game-over'>Game Over</h1>").appendTo(gameSpace);
+  $("<div class='final-score'>Score: "+scoreBoard[0]+"</div>").appendTo(gameSpace);
+  $(".score-board").addClass("invisible");
   var playAgain = $("<button id='replay-button'>Play Again!</button>").appendTo(gameSpace);
   playAgain.on("click", function(){
     window.location.reload();
