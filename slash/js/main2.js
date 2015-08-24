@@ -12,34 +12,34 @@ function initGame(){
   var slashLines = {
     redLine: {
       line: null,
-      upperEnd: {top:228,left:350},
-      lowerEnd: {top:528,left:1000}
+      upperEnd: {top:225,left:350},
+      lowerEnd: {top:525,left:1000}
     },
     greenLine: {
       line: null,
-      upperEnd: {top:228,left:800},
-      lowerEnd: {top:528,left:500}
+      upperEnd: {top:225,left:800},
+      lowerEnd: {top:525,left:500}
     },  
     blueLine: {
       line: null,
-      upperEnd: {top:228,left:550},
-      lowerEnd: {top:528,left:700}
+      upperEnd: {top:225,left:550},
+      lowerEnd: {top:525,left:700}
     },  
     yellowLine: {
       line: null,
-      upperEnd: {top:228,left:950},
-      lowerEnd: {top:528,left:900}
+      upperEnd: {top:225,left:950},
+      lowerEnd: {top:525,left:900}
     }
   };
 
-  var redTop = $("#red-top").offset({top:228,left:350});
-  var redBottom = $("#red-bottom").offset({top:528,left:1000});
-  var greenTop = $("#green-top").offset({top:228,left:800});
-  var greenBottom = $("#green-bottom").offset({top:528,left:500});
-  var blueTop = $("#blue-top").offset({top:228,left:550});
-  var blueBottom = $("#blue-bottom").offset({top:528,left:700});
-  var yellowTop = $("#yellow-top").offset({top:228,left:950});
-  var yellowBottom = $("#yellow-bottom").offset({top:528,left:900});
+  var redTop = $("#red-top").offset({top:225,left:350});
+  var redBottom = $("#red-bottom").offset({top:525,left:1000});
+  var greenTop = $("#green-top").offset({top:225,left:800});
+  var greenBottom = $("#green-bottom").offset({top:525,left:500});
+  var blueTop = $("#blue-top").offset({top:225,left:550});
+  var blueBottom = $("#blue-bottom").offset({top:525,left:700});
+  var yellowTop = $("#yellow-top").offset({top:225,left:950});
+  var yellowBottom = $("#yellow-bottom").offset({top:525,left:900});
 
   slashLines = setupSlashLines(slashLines);
   scoreBoard = playGame(slashLines, timeRange, maxDistance, accuracy, scoreBoard);
@@ -103,11 +103,8 @@ function playGame(slashLines, timeRange, maxDistance, accuracy, scoreBoard){
     e.preventDefault();
     console.log(e);
     var strikeLine = findLine(e, slashLines);
-    console.log("before the strik, life is: "+ scoreBoard[1]);
     results = strikeLine.strike(flyingObjects, accuracy, scoreBoard);
-    console.log(results);
     flyingObjects = results[1];
-    console.log("this before the display, the life is: "+ results[0][1]);
     scoreBoard = displayOutcome(results[0]);
   });
 
