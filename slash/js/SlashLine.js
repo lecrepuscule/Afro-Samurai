@@ -39,7 +39,7 @@ SlashLine = {
     return origin;
   },
 
-  strike: function(flyingObjects, accuracy, score, life){
+  strike: function(flyingObjects, accuracy, scoreBoard){
     var lineIntercept = this.intercept;
     var lineGradient = this.gradient;
     this.drawLine();
@@ -62,7 +62,7 @@ SlashLine = {
       }
     }
 
-    bonus ? (score += 10*Math.pow(bonus,2)) : life--;
+    bonus ? (scoreBoard[0] += 10*Math.pow(bonus,2)) : scoreBoard[1]--;
 
     // $.each(flyingObjects, function(index, flyingObject){
     //   var x = flyingObject.physicalBody.offset().left;
@@ -78,7 +78,7 @@ SlashLine = {
     //     console.log("miss! " + (striked-x));
     //   }
     // })
-    return [flyingObjects, score, life];
+    return [scoreBoard, flyingObjects];
   },
 
   drawLine: function() {
