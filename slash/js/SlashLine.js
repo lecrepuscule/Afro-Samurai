@@ -61,7 +61,6 @@ SlashLine = {
         console.log("miss! " + (striked-x));
       }
     }
-
     bonus ? (scoreBoard[0] += 10*Math.pow(bonus,2)) : scoreBoard[1]--;
 
     // $.each(flyingObjects, function(index, flyingObject){

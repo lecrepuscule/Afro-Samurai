@@ -4,7 +4,7 @@ $(document).ready(function(){
 
 function initGame(){
   var accuracy = 40; //the error margin that counts as a successful strike
-  var timeRange = [1000, 2000]; //determines how long it takes for the flying objects to traverse the screen
+  var timeRange = [2500, 4000]; //determines how long it takes for the flying objects to traverse the screen
   var maxDistance = $(window).width()/3; //determines how fast the objects fly
   var scoreBoard = [0,3];
 
@@ -120,32 +120,50 @@ function playGame(slashLines, timeRange, maxDistance, accuracy, scoreBoard){
   console.log("the line is: " + slashLine.id);
   var flyingObjects = slashLine.generateObjects(timeRange, maxDistance);
   console.log(flyingObjects);
+  console.log("the scoreBoard is: " + scoreBoard);
 
   $("body").on("keypress", function(e){
     e.preventDefault();
     console.log(e);
     var strikeLine = findLine(e, slashLines);
+    console.log("before the strik, life is: "+ scoreBoard[1]);
     results = strikeLine.strike(flyingObjects, accuracy, scoreBoard);
     console.log(results);
     flyingObjects = results[1];
+    console.log("this before the display, the life is: "+ results[0][1]);
     scoreBoard = displayOutcome(results[0]);
   });
 
   var safeWord = setInterval(function(){
     var currentTurn = 0;
-    if (flyingObjects.length === 0) {
-      clearInterval(safeWord);
-      scoreBoard = checkResults(results, scoreBoard, slashLines, timeRange, maxDistance, accuracy);
+    if (flyingObjects.length) {
+      $.each(flyingObjects, function(index, flyingObject){
+        flyingObject.fly(safeWord);
+        currentTurn += isOnScreen(flyingObject);
+      })
+      if (!currentTurn){
+        clearInterval(safeWord);
+        scoreBoard = checkResults(results, scoreBoard, slashLines, timeRange, maxDistance, accuracy);
+      }
     }
-    $.each(flyingObjects, function(index, flyingObject){
-      flyingObject.fly(safeWord);
-      currentTurn += isOnScreen(flyingObject);
-    })
-    if (!currentTurn){
-      clearInterval(safeWord);
-      scoreBoard = checkResults(results, scoreBoard, slashLines, timeRange, maxDistance, accuracy);
-    }
-  },5);
+      else {
+        clearInterval(safeWord);
+        scoreBoard = checkResults(results, scoreBoard, slashLines, timeRange, maxDistance, accuracy);
+      }
+    },5)
+  //   {
+  //     clearInterval(safeWord);
+  //     scoreBoard = checkResults(results, scoreBoard, slashLines, timeRange, maxDistance, accuracy);
+  //   } 
+  //   $.each(flyingObjects, function(index, flyingObject){
+  //     flyingObject.fly(safeWord);
+  //     currentTurn += isOnScreen(flyingObject);
+  //   })
+  //   if (!currentTurn){
+  //     clearInterval(safeWord);
+  //     scoreBoard = checkResults(results, scoreBoard, slashLines, timeRange, maxDistance, accuracy);
+  //   }
+  // },5);
   return scoreBoard;
 }
 
@@ -154,12 +172,15 @@ function checkResults(results, scoreBoard, slashLines, timeRange, maxDistance, a
     scoreBoard[1]--;
   }
   displayOutcome(scoreBoard);
+  $("body").off();
   return (scoreBoard[1] <= 0) ? endGame() : playGame(slashLines, timeRange, maxDistance, accuracy, scoreBoard);
 }
 
 function displayOutcome(scoreBoard){
   for (i=3-scoreBoard[1]; i>0; i--){
+    if ($(".life-icon").length > scoreBoard[1]){
       $($(".life-icon")[0]).remove();
+    }
   }
   $(".score").text(scoreBoard[0]);
   return scoreBoard;
@@ -168,16 +189,15 @@ function displayOutcome(scoreBoard){
 function isOnScreen(flyingObject){
   var position = flyingObject.physicalBody.offset().left;
   if (flyingObject.direction) {
-    return position < -20 ? 0 : 1;
+    return position < -50 ? 0 : 1;
   }
   else {
-    return (position > ($(window).width()+20)) ? 0 : 1;
+    return (position > ($(window).width()+50)) ? 0 : 1;
   } 
 }
 
 function endGame(){
   console.log("Game Over!");
-  window.stop();
 }
 
 
