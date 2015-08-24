@@ -59,7 +59,6 @@ SlashLine = {
       var striked = (y + lineIntercept) / lineGradient;
 
       if (Math.abs(striked - x) < accuracy) {
-        // flyingObjects[i].physicalBody.remove();
         flyingObjects[i].physicalBody.addClass('invisible')
         flyingObjects.splice(i,1);
         i--;

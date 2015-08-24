@@ -1,11 +1,27 @@
 $(document).ready(function(){
-  initGame();
+  setDifficulty();
 })
 
-function initGame(){
-  var accuracy = 25; //the error margin that counts as a successful strike
-  var timeRange = [2000, 3500]; //determines how long it takes for the flying objects to traverse the screen
-  var maxDistance = $(window).width()/3; //determines how fast the objects fly
+function setDifficulty(){
+  $(".setting").on("click", function(e){
+    switch (this.value){
+      case "easy": 
+        initGame([[3000,4000], 35, $(window).width()/3]);
+        break;
+      case "normal":
+        initGame([[2000,3500], 25, $(window).width()/3]);
+        break;
+      case "hard":
+        initGame([[1000,3000], 20, $(window).width()/3]);
+        break
+    }
+  })
+}
+
+function initGame(settings){
+  var timeRange = settings[0]; //determines how long it takes for the flying objects to traverse the screen
+  var accuracy = settings[1]; //the error margin that counts as a successful strike
+  var maxDistance = settings[2]; //determines how fast the objects fly
   var scoreBoard = [0,3];
 
 
@@ -32,6 +48,7 @@ function initGame(){
     }
   };
 
+  $(".game-space").empty();
   $("<canvas id='canvas' height='300' width='1440'></canvas>").appendTo(".game-space");
   slashLines = setupSlashLines(slashLines);
   scoreBoard = playGame(slashLines, timeRange, maxDistance, accuracy, scoreBoard);
@@ -52,7 +69,7 @@ function setupSlashLines(slashLines){
 
 
 function pickLines(slashLines){
-  lineIndex = Math.ceil(Math.random()*4);
+  var lineIndex = Math.ceil(Math.random()*4);
   switch (lineIndex){
     case 1:
       return slashLines.red.line;
@@ -66,7 +83,6 @@ function pickLines(slashLines){
 }
 
 function findLine(e, slashLines){
-  console.log(slashLines);
   console.log(e.keyCode);
   switch(e.keyCode){
     case 114:
@@ -121,7 +137,6 @@ function playGame(slashLines, timeRange, maxDistance, accuracy, scoreBoard){
         scoreBoard = checkResults(results, scoreBoard, slashLines, timeRange, maxDistance, accuracy);
       }
     },5)
-
   return scoreBoard;
 }
 
@@ -160,7 +175,7 @@ function endGame(scoreBoard){
   $("<h1 class='game-over'>Game Over</h1>").appendTo(gameSpace);
   $("<div class='final-score'>Score: "+scoreBoard[0]+"</div>").appendTo(gameSpace);
   $(".score-board").addClass("invisible");
-  var playAgain = $("<button id='replay-button'>Play Again!</button>").appendTo(gameSpace);
+  var playAgain = $("<button id='replay-button'>Click to Replay</button>").appendTo(gameSpace);
   playAgain.on("click", function(){
     window.location.reload();
     // initGame();
