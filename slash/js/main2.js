@@ -3,44 +3,36 @@ $(document).ready(function(){
 })
 
 function initGame(){
-  var accuracy = 40; //the error margin that counts as a successful strike
-  var timeRange = [2000, 4000]; //determines how long it takes for the flying objects to traverse the screen
+  var accuracy = 25; //the error margin that counts as a successful strike
+  var timeRange = [2000, 3500]; //determines how long it takes for the flying objects to traverse the screen
   var maxDistance = $(window).width()/3; //determines how fast the objects fly
   var scoreBoard = [0,3];
 
 
   var slashLines = {
-    redLine: {
+    red: {
       line: null,
       upperEnd: {top:225,left:350},
       lowerEnd: {top:525,left:1000}
     },
-    greenLine: {
+    green: {
       line: null,
       upperEnd: {top:225,left:800},
       lowerEnd: {top:525,left:500}
     },  
-    blueLine: {
+    blue: {
       line: null,
       upperEnd: {top:225,left:550},
       lowerEnd: {top:525,left:700}
     },  
-    yellowLine: {
+    black: {
       line: null,
       upperEnd: {top:225,left:950},
       lowerEnd: {top:525,left:900}
     }
   };
 
-  var redTop = $("#red-top").offset({top:225,left:350});
-  var redBottom = $("#red-bottom").offset({top:525,left:1000});
-  var greenTop = $("#green-top").offset({top:225,left:800});
-  var greenBottom = $("#green-bottom").offset({top:525,left:500});
-  var blueTop = $("#blue-top").offset({top:225,left:550});
-  var blueBottom = $("#blue-bottom").offset({top:525,left:700});
-  var yellowTop = $("#yellow-top").offset({top:225,left:950});
-  var yellowBottom = $("#yellow-bottom").offset({top:525,left:900});
-
+  $("<canvas id='canvas' height='300' width='1440'></canvas>").appendTo(".game-space");
   slashLines = setupSlashLines(slashLines);
   scoreBoard = playGame(slashLines, timeRange, maxDistance, accuracy, scoreBoard);
 }
@@ -53,21 +45,23 @@ function setupSlashLines(slashLines){
     value.line.lowerEnd = value.lowerEnd;
     value.line.gradient = (value.lowerEnd.top - value.upperEnd.top) / (value.lowerEnd.left - value.upperEnd.left);
     value.line.intercept = value.line.gradient * value.lowerEnd.left - value.lowerEnd.top;
+    value.line.placeEndPoints();
   })
   return slashLines;
 }
+
 
 function pickLines(slashLines){
   lineIndex = Math.ceil(Math.random()*4);
   switch (lineIndex){
     case 1:
-      return slashLines.redLine.line;
+      return slashLines.red.line;
     case 2:
-      return slashLines.greenLine.line;
+      return slashLines.green.line;
     case 3:
-      return slashLines.blueLine.line;
+      return slashLines.blue.line;
     case 4:
-      return slashLines.yellowLine.line;
+      return slashLines.black.line;
   }
 }
 
@@ -77,16 +71,16 @@ function findLine(e, slashLines){
   switch(e.keyCode){
     case 114:
       $("#canvas")[0].getContext("2d").strokeStyle="red";
-      return slashLines.redLine.line;
+      return slashLines.red.line;
     case 103:
       $("#canvas")[0].getContext("2d").strokeStyle="green";
-      return slashLines.greenLine.line;
+      return slashLines.green.line;
     case 98:
       $("#canvas")[0].getContext("2d").strokeStyle="blue";
-      return slashLines.blueLine.line;
+      return slashLines.blue.line;
     case 121:
       $("#canvas")[0].getContext("2d").strokeStyle="black";
-      return slashLines.yellowLine.line;
+      return slashLines.black.line;
     default:
       console.log("wrong button!")
   }
@@ -137,7 +131,7 @@ function checkResults(results, scoreBoard, slashLines, timeRange, maxDistance, a
   }
   displayOutcome(scoreBoard);
   $("body").off();
-  return (scoreBoard[1] <= 0) ? endGame() : playGame(slashLines, timeRange, maxDistance, accuracy, scoreBoard);
+  return (scoreBoard[1] <= 0) ? endGame(scoreBoard) : playGame(slashLines, timeRange, maxDistance, accuracy, scoreBoard);
 }
 
 function displayOutcome(scoreBoard){
@@ -160,7 +154,16 @@ function isOnScreen(flyingObject){
   } 
 }
 
-function endGame(){
+function endGame(scoreBoard){
+  $(".game-space").text("GAME OVER");
+  var anotherRound = $("<div>").addClass("option").text("Another Round!");
+  anotherRound.appendTo(".game-space");
+  anotherRound.on("click", function(){
+    anotherRound.remove();
+    $(".game-space").text("");
+    window.location.reload();
+    // initGame();
+  });
   console.log("Game Over!");
 }
 
