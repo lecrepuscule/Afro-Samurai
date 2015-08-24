@@ -8,7 +8,19 @@
   width: 150px;
   height: 100px;
   display: inline-block;
-  margin-top: 130px;
+  margin-top: 120px;
+}
+
+.life-icon {
+  width: 45px;
+  height: 40px;
+  display: inline-block;
+}
+
+.score {
+  font-size: 42px;
+  margin: 0 auto;
+  text-align: center;
 }
 
 .game-space {
@@ -17,7 +29,7 @@
   background-color: beige;
   border-top: 1px solid black;
   border-bottom: 1px solid black;
-/*  margin-top: 30px;*/
+  margin-top: 10px;
 }
 
 .dots {
