@@ -3,119 +3,167 @@ $(document).ready(function(){
 })
 
 function initGame(){
-  var redTop = $("#red-top").offset({top:206,left:450});
-  var redBottom = $("#red-bottom").offset({top:506,left:850});
-  var redLine = {
-      upperEnd: redTop.offset(),
-      lowerEnd: redBottom.offset(),
-      gradient: (redBottom.offset().top - redTop.offset().top) / (redBottom.offset().left - redTop.offset().left),
-      intercept: (redBottom.offset().top - redTop.offset().top) / (redBottom.offset().left - redTop.offset().left) * redBottom.offset().left - redBottom.offset().top
-      // (506-206)/(850-450)
-    };
-  var timeRange = [1000, 2000]
-  var distance = $(window).width()+30;
-  console.log(redLine);
-  //start the game 
-  var point = pickPoint(redLine);
-  var safeWord;
-  // playGame(point, timeRange, distance, safeWord);
+  var accuracy = 25; //the error margin that counts as a successful strike
+  var timeRange = [2000, 3500]; //determines how long it takes for the flying objects to traverse the screen
+  var maxDistance = $(window).width()/3; //determines how fast the objects fly
+  var scoreBoard = [0,3];
+
+
+  var slashLines = {
+    red: {
+      line: null,
+      upperEnd: {top:225,left:350},
+      lowerEnd: {top:525,left:1000}
+    },
+    green: {
+      line: null,
+      upperEnd: {top:225,left:800},
+      lowerEnd: {top:525,left:500}
+    },  
+    blue: {
+      line: null,
+      upperEnd: {top:225,left:550},
+      lowerEnd: {top:525,left:700}
+    },  
+    black: {
+      line: null,
+      upperEnd: {top:225,left:950},
+      lowerEnd: {top:525,left:900}
+    }
+  };
+
+  $("<canvas id='canvas' height='300' width='1440'></canvas>").appendTo(".game-space");
+  slashLines = setupSlashLines(slashLines);
+  scoreBoard = playGame(slashLines, timeRange, maxDistance, accuracy, scoreBoard);
+}
+
+function setupSlashLines(slashLines){
+  $.each(slashLines, function(key, value){
+    value.line = Object.create(SlashLine);
+    value.line.id = key;
+    value.line.upperEnd = value.upperEnd;
+    value.line.lowerEnd = value.lowerEnd;
+    value.line.gradient = (value.lowerEnd.top - value.upperEnd.top) / (value.lowerEnd.left - value.upperEnd.left);
+    value.line.intercept = value.line.gradient * value.lowerEnd.left - value.lowerEnd.top;
+    value.line.placeEndPoints();
+  })
+  return slashLines;
+}
+
+
+function pickLines(slashLines){
+  lineIndex = Math.ceil(Math.random()*4);
+  switch (lineIndex){
+    case 1:
+      return slashLines.red.line;
+    case 2:
+      return slashLines.green.line;
+    case 3:
+      return slashLines.blue.line;
+    case 4:
+      return slashLines.black.line;
+  }
+}
+
+function findLine(e, slashLines){
+  console.log(slashLines);
+  console.log(e.keyCode);
+  switch(e.keyCode){
+    case 114:
+      $("#canvas")[0].getContext("2d").strokeStyle="red";
+      return slashLines.red.line;
+    case 103:
+      $("#canvas")[0].getContext("2d").strokeStyle="green";
+      return slashLines.green.line;
+    case 98:
+      $("#canvas")[0].getContext("2d").strokeStyle="blue";
+      return slashLines.blue.line;
+    case 121:
+      $("#canvas")[0].getContext("2d").strokeStyle="black";
+      return slashLines.black.line;
+    default:
+      console.log("wrong button!")
+  }
+}
+
+function playGame(slashLines, timeRange, maxDistance, accuracy, scoreBoard){
+  var results = null;
+  var slashLine = pickLines(slashLines);
+  var flyingObjects = slashLine.generateObjects(timeRange, maxDistance);
+  var destroyedObjects = [];
+
+
   $("body").on("keypress", function(e){
     e.preventDefault();
     console.log(e);
-    // var startTime = Date.now();
-    strike(point, redLine);
+    var strikeLine = findLine(e, slashLines);
+    results = strikeLine.strike(flyingObjects, accuracy, scoreBoard);
+    flyingObjects = results[1];
+    scoreBoard = displayOutcome(results[0]);
+  });
+
+  var safeWord = setInterval(function(){
+    var currentTurn = 0;
+    if (flyingObjects.length) {
+      $.each(flyingObjects, function(index, flyingObject){
+        flyingObject.fly(safeWord);
+        currentTurn += isOnScreen(flyingObject);
+      })
+      if (!currentTurn){
+        clearInterval(safeWord);
+        $('.flying-object').remove();
+        scoreBoard = checkResults(results, scoreBoard, slashLines, timeRange, maxDistance, accuracy);
+      }
+    }
+      else {
+        clearInterval(safeWord);
+        $('.flying-object').remove();
+        scoreBoard = checkResults(results, scoreBoard, slashLines, timeRange, maxDistance, accuracy);
+      }
+    },5)
+
+  return scoreBoard;
+}
+
+function checkResults(results, scoreBoard, slashLines, timeRange, maxDistance, accuracy){
+  if (results === null){
+    scoreBoard[1]--;
+  }
+  displayOutcome(scoreBoard);
+  $("body").off();
+  return (scoreBoard[1] <= 0) ? endGame(scoreBoard) : playGame(slashLines, timeRange, maxDistance, accuracy, scoreBoard);
+}
+
+function displayOutcome(scoreBoard){
+  for (i=3-scoreBoard[1]; i>0; i--){
+    if ($(".life-icon").length > scoreBoard[1]){
+      $($(".life-icon")[0]).remove();
+    }
+  }
+  $(".score").text(scoreBoard[0]);
+  return scoreBoard;
+}
+
+function isOnScreen(flyingObject){
+  var position = flyingObject.physicalBody.offset().left;
+  if (flyingObject.direction) {
+    return position < -50 ? 0 : 1;
+  }
+  else {
+    return (position > ($(window).width()+50)) ? 0 : 1;
+  } 
+}
+
+function endGame(scoreBoard){
+  var gameSpace = $(".game-space");
+  gameSpace.empty();
+  $("<h1 class='game-over'>Game Over</h1>").appendTo(gameSpace);
+  var playAgain = $("<button id='replay-button'>Play Again!</button>").appendTo(gameSpace);
+  playAgain.on("click", function(){
+    window.location.reload();
+    // initGame();
   });
 }
-
-// function keypressHandler(e){
-//   console.log(e);
-//   playGame();
-// }
-
-function playGame(point, timeRange, distance, startTime){
-  var time = pickTime(timeRange);
-  var speed = pickSpeed(point, time, distance);
-  moveObject(point, time, speed, distance, startTime);
-}
-
-// may be add in some "margining" value to avoid near the end points
-function pickPoint(line){
-  var numOfPoints = Math.ceil(Math.random()*4);
-  var points = [];
-  for (i=1; i<= numOfPoints; i++){
-    var dtop = Math.round(Math.random()*(line.lowerEnd.top - line.upperEnd.top));
-    var point = {
-      top: line.upperEnd.top + dtop,
-      left: ((line.upperEnd.top + dtop) + line.intercept) / line.gradient
-    }
-    console.log(point);
-    var newObj = $("<div class='test'></div>").attr("id","object-"+i);
-    newObj.appendTo(".game-space");
-    newObj.offset(point);
-    // $(".test").offset(point);
-    points.push(point);
-  }
-  return points;
-}
-
-// to not let the flying object go past too fast or slow through the screen, an range is given to the time and speed, e.g. 1000 < time < 4000, 1430 > speed > 1430 /4 per 1000 ms
-function pickTime (timeRange){
-  var time = (Number((Math.random()*(timeRange[1]-timeRange[0])).toFixed(0)) + timeRange[0]) / 5;
-  console.log("time is: " + time);
-  return time;
-}
-
-function pickSpeed (point, time, distance){
-  // var minSpeed = ($(window).width() - point.left)/time;
-  // var speed = Number((Math.random()*maxSpeed).toFixed(3)) + minSpeed;
-  var speed = (distance - point.left) /time;
-  console.log("speed is: " + speed);
-  return speed;
-}
-
-// function pickDistance(point, time, speed){
-//   var distance = speed * time + point.left;
-//   console.log("distance: "+ distance);
-//   return distance;
-// }
-
-// setInterval is inaccurate, but for the purpose of this game, it may not be a blocker
-function moveObject(point, time, speed, distance, safeWord){
-  $(".test").offset({left:distance});
-  console.log("distance is " + distance);
-  // var time0 = 0;
-  safeWord = setInterval(function(){
-    distance -= speed;
-    $(".test").offset({left:distance});
-    if ( distance < -30) {
-      clearInterval(safeWord);
-      console.log("clear!");
-    }
-    // console.log("this interval takes: " + (Date.now()-time0));
-    // time0 = Date.now();
-    // if ( Math.floor(distance - point.left) < 1) {
-    //   clearInterval(moveObject);
-    //   console.log("Total time lapse: " + (Date.now() - startTime));
-    // }
-  }, 5);
-}
-
-function strike(point, line){
-  var x = $(".test").offset().left;
-  var y = $(".test").offset().top;
-  var striked = (y + line.intercept) / x;
-  Math.abs(striked - line.gradient) < 0.03 ? console.log("Dead cat!") : console.log("miss!" + striked);
-  // Math.abs(objectPosition - point.left) < 30 ? console.log("Dead cat!") : console.log("miss!" + objectPosition);
-}
-
-  /*define height and width of the tunnel*/
-
-
-  // $('.background').on("keypress", function(e){
-  //   console.log(e.offsetX);
-  //   console.log(e.offsetY);
-  // })
-
 
 
 
