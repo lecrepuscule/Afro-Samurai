@@ -11,8 +11,8 @@ SlashLine = {
 
   placeEndPoints: function(){
     var gameSpace = $(".game-space");
-    var top = $("<div class='"+this.id+"-dots dots' id='"+this.id+"-top'></div>").appendTo(gameSpace);
-    var bottom = top.clone().attr("id",this.id+"-bottom").appendTo(gameSpace);
+    var top = $("<div class='"+this.id+"-dots dots' id='"+this.id+"-top'>"+this.letter.name+"</div>").appendTo(gameSpace);
+    var bottom = top.clone().attr("id",this.id+"-bottom").text("").appendTo(gameSpace);
     top.offset(this.upperEnd);
     bottom.offset(this.lowerEnd);
   },

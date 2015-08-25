@@ -34,13 +34,13 @@ function initGame(settings){
     },
     green: {
       line: null,
-      letter: {name:"F", code:106},
+      letter: {name:"J", code:106},
       upperEnd: {top:225,left:800},
       lowerEnd: {top:525,left:500}
     },  
     blue: {
       line: null,
-      letter: {name:"J", code:102},
+      letter: {name:"F", code:102},
       upperEnd: {top:225,left:550},
       lowerEnd: {top:525,left:700}
     },  
