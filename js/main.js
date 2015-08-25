@@ -6,13 +6,13 @@ function setDifficulty(){
   $(".setting").on("click", function(e){
     switch (this.value){
       case "easy": 
-        initGame([[3000,4000], 35, $(window).width()/3]);
+        initGame([[3000,4000], 35, $(window).width()/3, 4]);
         break;
       case "normal":
-        initGame([[2000,3500], 25, $(window).width()/3]);
+        initGame([[2000,3500], 25, $(window).width()/3, 5]);
         break;
       case "hard":
-        initGame([[1000,3000], 20, $(window).width()/3]);
+        initGame([[1000,3000], 20, $(window).width()/3, 6]);
         break
     }
   })
@@ -22,6 +22,7 @@ function initGame(settings){
   var timeRange = settings[0]; //determines how long it takes for the flying objects to traverse the screen
   var accuracy = settings[1]; //the error margin that counts as a successful strike
   var maxDistance = settings[2]; //determines how fast the objects fly
+  var numOfObjects = settings[3];
   var scoreBoard = [0,3];
 
 
@@ -56,7 +57,7 @@ function initGame(settings){
   $("<canvas id='canvas' height='300' width='1440'></canvas>").appendTo(".game-space");
   $("<img src='images/all-clear.png' class='flash-pic' id='all-clear'>").appendTo(".game-space");
   slashLines = setupSlashLines(slashLines);
-  scoreBoard = playGame(slashLines, timeRange, maxDistance, accuracy, scoreBoard);
+  scoreBoard = playGame(slashLines, timeRange, maxDistance, accuracy, numOfObjects, scoreBoard);
 }
 
 function setupSlashLines(slashLines){
@@ -101,11 +102,11 @@ function findLine(e, slashLines){
   return slashLine;
 }
 
-function playGame(slashLines, timeRange, maxDistance, accuracy, scoreBoard){
+function playGame(slashLines, timeRange, maxDistance, accuracy, numOfObjects,scoreBoard){
   var results = null;
   var currentTurn = 1;
   var slashLine = pickLines(slashLines);
-  var flyingObjects = slashLine.generateObjects(timeRange, maxDistance);
+  var flyingObjects = slashLine.generateObjects(timeRange, maxDistance, numOfObjects);
 
 
   $("body").on("keypress", function(e){
@@ -115,7 +116,7 @@ function playGame(slashLines, timeRange, maxDistance, accuracy, scoreBoard){
     results = strikeLine.strike(flyingObjects, accuracy);
     console.log(results);
     flyingObjects = results[1];
-    scoreBoard = checkResults(results, scoreBoard, slashLines, timeRange, maxDistance, accuracy, currentTurn);
+    scoreBoard = checkResults(results, scoreBoard, slashLines, timeRange, maxDistance, accuracy, numOfObjects, currentTurn);
   });
 
   var safeWord = setInterval(function(){
@@ -127,13 +128,13 @@ function playGame(slashLines, timeRange, maxDistance, accuracy, scoreBoard){
       currentTurn = numOnScreen;
       if (!currentTurn){
         clearInterval(safeWord);
-        scoreBoard = checkResults(results, scoreBoard, slashLines, timeRange, maxDistance, accuracy, currentTurn);
+        scoreBoard = checkResults(results, scoreBoard, slashLines, timeRange, maxDistance, accuracy, numOfObjects, currentTurn);
       }
   },5)
   return scoreBoard;
 }
 
-function checkResults(results, scoreBoard, slashLines, timeRange, maxDistance, accuracy, currentTurn){
+function checkResults(results, scoreBoard, slashLines, timeRange, maxDistance, accuracy, numOfObjects, currentTurn){
   if (currentTurn){
     results[0] ? (scoreBoard[0] += 10*Math.pow(results[0],2)) : scoreBoard[1]--;
     showFlash(results[0]);
@@ -152,7 +153,7 @@ function checkResults(results, scoreBoard, slashLines, timeRange, maxDistance, a
   else if ((!currentTurn) || results[1].length === 0){
     $('.flying-object').remove();
     $("body").off();
-    playGame(slashLines, timeRange, maxDistance, accuracy, scoreBoard);
+    playGame(slashLines, timeRange, maxDistance, accuracy, numOfObjects, scoreBoard);
   }
   return scoreBoard;
 }
@@ -173,8 +174,36 @@ function showFlash(bonus){
   var gameSpace = $(".game-space");
   var bonusSign = $(".bonus-sign");
   switch (bonus) {
+    case 6:
+      bonusSign.text("X6!!!");
+      setTimeout(function(){
+        bonusSign.removeClass("invisible");
+        bonusSign.addClass("animated slideInUp");
+        allClear.addClass("animated bounceInRight");
+        score.addClass("animated pulse");
+        gameSpace.addClass("animated shake");
+      },50);
+      setTimeout(function(){
+        allClear.addClass("bounceOutLeft");
+        bonusSign.addClass("slideOutUp");
+      },400);
+    break;
+    case 5:
+      bonusSign.text("X5!!");
+      setTimeout(function(){
+        bonusSign.removeClass("invisible");
+        bonusSign.addClass("animated slideInUp");
+        allClear.addClass("animated bounceInRight");
+        score.addClass("animated pulse");
+        gameSpace.addClass("animated shake");
+      },50);
+      setTimeout(function(){
+        allClear.addClass("bounceOutLeft");
+        bonusSign.addClass("slideOutUp");
+      },400);
+    break;
     case 4:
-      bonusSign.text("X4!")
+      bonusSign.text("X4!");
       setTimeout(function(){
         bonusSign.removeClass("invisible");
         bonusSign.addClass("animated slideInUp");
@@ -188,7 +217,7 @@ function showFlash(bonus){
       },400);
     break;
     case 3:
-      bonusSign.text("X3")
+      bonusSign.text("X3");
       setTimeout(function(){
         bonusSign.removeClass("invisible");
         bonusSign.addClass("animated slideInUp");
@@ -200,7 +229,7 @@ function showFlash(bonus){
       },400);
     break;
     case 2:
-      bonusSign.text("X2")
+      bonusSign.text("X2");
       setTimeout(function(){
         bonusSign.removeClass("invisible");
         bonusSign.addClass("animated slideInUp");

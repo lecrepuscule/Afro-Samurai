@@ -23,10 +23,10 @@ SlashLine = {
     return time;
   },
 
-  generateObjects: function(timeRange, maxDistance){
+  generateObjects: function(timeRange, maxDistance, numOfObjects){
     var flyingObjects = [];
     var time = this.pickTime(timeRange);
-    var numOfObjects = Math.ceil(Math.random()*4);
+    var numOfObjects = Math.ceil(Math.random()*numOfObjects);
     for (i=1; i<= numOfObjects; i++){
       flyingObject = Object.create(FlyingObject);
       flyingObject.id = i;
@@ -51,7 +51,7 @@ SlashLine = {
   strike: function(flyingObjects, accuracy){
     var lineIntercept = this.intercept;
     var lineGradient = this.gradient;
-    this.drawLine();
+    this.drawLine(accuracy);
     var strikeCount = 0;
     for (i=0; i< flyingObjects.length; i++){
       var x = flyingObjects[i].physicalBody.offset().left;
@@ -74,12 +74,12 @@ SlashLine = {
     return [strikeCount, flyingObjects];
   },
 
-  drawLine: function() {
+  drawLine: function(accuracy) {
     var c = $("#canvas");
     var ctx = c[0].getContext("2d");
     ctx.moveTo(this.upperEnd.left + 15,0);
     ctx.lineTo(this.lowerEnd.left + 15,300);
-    ctx.lineWidth = 10;
+    ctx.lineWidth = accuracy/4;
     ctx.stroke();
     setTimeout(function(){
       c.replaceWith("<canvas id='canvas' height='300' width='1440'></canvas>");
