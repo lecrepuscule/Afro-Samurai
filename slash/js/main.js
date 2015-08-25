@@ -103,49 +103,75 @@ function findLine(e, slashLines){
 
 function playGame(slashLines, timeRange, maxDistance, accuracy, scoreBoard){
   var results = null;
+  var currentTurn = 1;
   var slashLine = pickLines(slashLines);
   var flyingObjects = slashLine.generateObjects(timeRange, maxDistance);
-  var destroyedObjects = [];
 
 
   $("body").on("keypress", function(e){
     e.preventDefault();
     console.log(e);
     var strikeLine = findLine(e, slashLines);
-    results = strikeLine.strike(flyingObjects, accuracy, scoreBoard);
+    results = strikeLine.strike(flyingObjects, accuracy);
+    console.log(results);
     flyingObjects = results[1];
-    scoreBoard = displayOutcome(results[0]);
+    scoreBoard = checkResults(results, scoreBoard, slashLines, timeRange, maxDistance, accuracy, currentTurn);
+
+    // scoreBoard = displayOutcome(results[0]);
   });
 
   var safeWord = setInterval(function(){
-    var currentTurn = 0;
-    if (flyingObjects.length) {
+    // if (flyingObjects.length) {
+      var numOnScreen = 0;
       $.each(flyingObjects, function(index, flyingObject){
         flyingObject.fly(safeWord);
-        currentTurn += isOnScreen(flyingObject);
+        numOnScreen += isOnScreen(flyingObject);
       })
+      currentTurn = numOnScreen;
       if (!currentTurn){
         clearInterval(safeWord);
-        $('.flying-object').remove();
-        scoreBoard = checkResults(results, scoreBoard, slashLines, timeRange, maxDistance, accuracy);
+        // $('.flying-object').remove();
+        scoreBoard = checkResults(results, scoreBoard, slashLines, timeRange, maxDistance, accuracy, currentTurn);
       }
-    }
-      else {
-        clearInterval(safeWord);
-        $('.flying-object').remove();
-        scoreBoard = checkResults(results, scoreBoard, slashLines, timeRange, maxDistance, accuracy);
-      }
-    },5)
+    // }
+    // else {
+    //   clearInterval(safeWord);
+    //   $('.flying-object').remove();
+    //   scoreBoard = checkResults(results, scoreBoard, slashLines, timeRange, maxDistance, accuracy);
+    // }
+  },5)
   return scoreBoard;
 }
 
-function checkResults(results, scoreBoard, slashLines, timeRange, maxDistance, accuracy){
-  if (results === null){
-    scoreBoard[1]--;
+// function checkResults(results, scoreBoard, slashLines, timeRange, maxDistance, accuracy){
+//   if (results === null){
+//     scoreBoard[1]--;
+//   }
+//   displayOutcome(scoreBoard);
+//   $("body").off();
+//   return (scoreBoard[1] <= 0) ? endGame(scoreBoard) : playGame(slashLines, timeRange, maxDistance, accuracy, scoreBoard);
+// }
+
+function checkResults(results, scoreBoard, slashLines, timeRange, maxDistance, accuracy, currentTurn){
+  // debugger;
+  if (currentTurn){
+    results[0] ? (scoreBoard[0] += 10*Math.pow(results[0],2)) : scoreBoard[1]--;
+  }
+  else if (results === null){
+      scoreBoard[1]--;
   }
   displayOutcome(scoreBoard);
-  $("body").off();
-  return (scoreBoard[1] <= 0) ? endGame(scoreBoard) : playGame(slashLines, timeRange, maxDistance, accuracy, scoreBoard);
+
+  if (scoreBoard[1] <= 0){
+    $("body").off();
+    endGame(scoreBoard);
+  }
+  else if ((!currentTurn) || results[1].length === 0){
+    $('.flying-object').remove();
+    $("body").off();
+    playGame(slashLines, timeRange, maxDistance, accuracy, scoreBoard);
+  }
+  return scoreBoard;
 }
 
 function displayOutcome(scoreBoard){

@@ -8,6 +8,9 @@ body {
   z-index: 2;
   top: 350px;
   left:600px;
+  top: -140px;
+  height: 100%;
+  opacity: 0;
 }
 
 .option {

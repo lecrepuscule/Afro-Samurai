@@ -48,30 +48,32 @@ SlashLine = {
     return origin;
   },
 
-  strike: function(flyingObjects, accuracy, scoreBoard){
+  strike: function(flyingObjects, accuracy){
     var lineIntercept = this.intercept;
     var lineGradient = this.gradient;
     this.drawLine();
-    var bonus = 0;
-
+    var strikeCount = 0;
+    // debugger;
     for (i=0; i< flyingObjects.length; i++){
       var x = flyingObjects[i].physicalBody.offset().left;
       var y = flyingObjects[i].physicalBody.offset().top;
       var striked = (y + lineIntercept) / lineGradient;
-
+    // debugger;
       if (Math.abs(striked - x) < accuracy) {
         flyingObjects[i].physicalBody.addClass('invisible')
         flyingObjects.splice(i,1);
         i--;
-        bonus++;
+    // debugger;
+        strikeCount++;
         console.log("Dead cat!");
       } 
       else {
         console.log("miss! " + (striked-x));
       }
     }
-    bonus ? (scoreBoard[0] += 10*Math.pow(bonus,2)) : scoreBoard[1]--;
-    return [scoreBoard, flyingObjects];
+    console.log("inside strike function: "+ strikeCount);
+    // bonus ? (scoreBoard[0] += 10*Math.pow(bonus,2)) : scoreBoard[1]--;
+    return [strikeCount, flyingObjects];
   },
 
   drawLine: function() {
