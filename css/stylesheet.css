@@ -11,9 +11,7 @@ body {
   font-family: sans-serif;
   font-size: 50px;
   font-style: oblique;
-  z-index: 3;
 }
-
 
 .flash-pic {
   position:fixed;
@@ -22,6 +20,21 @@ body {
   left:300px;
   height: 80%;
   opacity: 0;
+}
+
+#clear4 {
+  z-index: 2;
+}
+
+#clear5 {
+  z-index: 3;
+}
+
+#clear6 {
+  z-index: 4;
+  height: 100%;
+  left: 100px;
+  width: 90%;
 }
 
 .show {
@@ -71,6 +84,7 @@ body {
   font-style: italic;
   background: beige;
   border: none;
+  z-index: 5;
 }
 
 .option {
@@ -78,6 +92,7 @@ body {
   height: 50%;
   border: 1px solid red;
   display: inline-block;
+  z-index: 5;
 }
 
 
@@ -122,7 +137,7 @@ body {
   border-bottom: 1px solid black;
   margin-top: 10px;
   opacity: 0.7;
-  position:relative;
+  position: relative;
 }
 
 .dots {

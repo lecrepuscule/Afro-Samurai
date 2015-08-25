@@ -1,8 +1,9 @@
 $(document).ready(function(){
-  setDifficulty();
+  chooseSettings();
 })
 
-function setDifficulty(){
+function chooseSettings(){
+  $(".game-space").css("z-index", 5);
   $(".setting").on("click", function(e){
     switch (this.value){
       case "easy": 
@@ -13,7 +14,7 @@ function setDifficulty(){
         break;
       case "hard":
         initGame([[1000,3000], 20, $(window).width()/3, 6]);
-        break
+        break;
     }
   })
 }
@@ -22,7 +23,7 @@ function initGame(settings){
   var timeRange = settings[0]; //determines how long it takes for the flying objects to traverse the screen
   var accuracy = settings[1]; //the error margin that counts as a successful strike
   var maxDistance = settings[2]; //determines how fast the objects fly
-  var numOfObjects = settings[3];
+  var numOfObjects = settings[3]; //the max number of objects that can appear at one time
   var scoreBoard = [0,3];
 
 
@@ -54,8 +55,9 @@ function initGame(settings){
   };
 
   $(".game-space").empty();
+  $(".game-space").css("z-index", 1);
   $("<canvas id='canvas' height='300' width='1440'></canvas>").appendTo(".game-space");
-  $("<img src='images/all-clear.png' class='flash-pic' id='all-clear'>").appendTo(".game-space");
+  $("<img src='images/clear4.png' class='flash-pic' id='clear4'>").appendTo(".game-space");
   slashLines = setupSlashLines(slashLines);
   scoreBoard = playGame(slashLines, timeRange, maxDistance, accuracy, numOfObjects, scoreBoard);
 }
@@ -134,6 +136,7 @@ function playGame(slashLines, timeRange, maxDistance, accuracy, numOfObjects,sco
   return scoreBoard;
 }
 
+//this function keeps score and determines the outcome of the game, it is called after every keypress, or if no keypress event, at the end of the turn
 function checkResults(results, scoreBoard, slashLines, timeRange, maxDistance, accuracy, numOfObjects, currentTurn){
   if (currentTurn){
     results[0] ? (scoreBoard[0] += 10*Math.pow(results[0],2)) : scoreBoard[1]--;
@@ -168,51 +171,76 @@ function displayOutcome(scoreBoard){
   return scoreBoard;
 }
 
+function isOnScreen(flyingObject){
+  var position = flyingObject.physicalBody.offset().left;
+  if (flyingObject.direction) {
+    return position < -50 ? 0 : 1;
+  }
+  else {
+    return (position > ($(window).width()+50)) ? 0 : 1;
+  } 
+}
+
+function endGame(scoreBoard){
+  var gameSpace = $(".game-space");
+  gameSpace.empty();
+  $("<h1 class='game-over'>Game Over</h1>").appendTo(gameSpace);
+  $("<div class='final-score'>Score: "+scoreBoard[0]+"</div>").appendTo(gameSpace);
+  $(".score-board").addClass("invisible");
+  $(".game-space").css("z-index", 5);
+  var playAgain = $("<button id='replay-button'>Click to Replay</button>").appendTo(gameSpace);
+  playAgain.on("click", function(){
+    window.location.reload();
+  });
+}
+
 function showFlash(bonus){
-  var allClear = $("#all-clear");
   var score = $(".score");
   var gameSpace = $(".game-space");
   var bonusSign = $(".bonus-sign");
   switch (bonus) {
     case 6:
       bonusSign.text("X6!!!");
+      var clear6 = $("#clear6");
       setTimeout(function(){
         bonusSign.removeClass("invisible");
         bonusSign.addClass("animated slideInUp");
-        allClear.addClass("animated bounceInRight");
+        clear6.addClass("animated bounceInRight");
         score.addClass("animated pulse");
         gameSpace.addClass("animated shake");
       },50);
       setTimeout(function(){
-        allClear.addClass("bounceOutLeft");
+        clear6.addClass("bounceOutLeft");
         bonusSign.addClass("slideOutUp");
-      },400);
+      },500);
     break;
     case 5:
       bonusSign.text("X5!!");
+      var clear5 = $("#clear5");
       setTimeout(function(){
         bonusSign.removeClass("invisible");
         bonusSign.addClass("animated slideInUp");
-        allClear.addClass("animated bounceInRight");
+        clear5.addClass("animated bounceInRight");
         score.addClass("animated pulse");
         gameSpace.addClass("animated shake");
       },50);
       setTimeout(function(){
-        allClear.addClass("bounceOutLeft");
+        clear5.addClass("bounceOutLeft");
         bonusSign.addClass("slideOutUp");
-      },400);
+      },500);
     break;
     case 4:
+      var clear4 = $("#clear4");
       bonusSign.text("X4!");
       setTimeout(function(){
         bonusSign.removeClass("invisible");
         bonusSign.addClass("animated slideInUp");
-        allClear.addClass("animated bounceInRight");
+        clear4.addClass("animated bounceInRight");
         score.addClass("animated pulse");
         gameSpace.addClass("animated shake");
       },50);
       setTimeout(function(){
-        allClear.addClass("bounceOutLeft");
+        clear4.addClass("bounceOutLeft");
         bonusSign.addClass("slideOutUp");
       },400);
     break;
@@ -245,35 +273,9 @@ function showFlash(bonus){
     },50);
     break;
   }
-  allClear.removeClass("animated bounceInRight bounceOutLeft");
+  $(".flash-pic").removeClass("animated bounceInRight bounceOutLeft");
   score.removeClass("animated pulse");
   gameSpace.removeClass("animated shake");
   bonusSign.removeClass("animated slideInUp slideOutUp");
   bonusSign.addClass("invisible");
 }
-
-function isOnScreen(flyingObject){
-  var position = flyingObject.physicalBody.offset().left;
-  if (flyingObject.direction) {
-    return position < -50 ? 0 : 1;
-  }
-  else {
-    return (position > ($(window).width()+50)) ? 0 : 1;
-  } 
-}
-
-function endGame(scoreBoard){
-  var gameSpace = $(".game-space");
-  gameSpace.empty();
-  $("<h1 class='game-over'>Game Over</h1>").appendTo(gameSpace);
-  $("<div class='final-score'>Score: "+scoreBoard[0]+"</div>").appendTo(gameSpace);
-  $(".score-board").addClass("invisible");
-  var playAgain = $("<button id='replay-button'>Click to Replay</button>").appendTo(gameSpace);
-  playAgain.on("click", function(){
-    window.location.reload();
-    // initGame();
-  });
-}
-
-
-
