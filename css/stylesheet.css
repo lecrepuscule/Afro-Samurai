@@ -60,6 +60,11 @@ body {
   border: none;
 }
 
+.setting:hover {
+  box-shadow: 0 0 10px black;
+  border: black;
+}
+
 .game-over {
   text-align: center;
   font-size: 80px;
@@ -87,14 +92,11 @@ body {
   z-index: 5;
 }
 
-.option {
-  width: 50%;
-  height: 50%;
-  border: 1px solid red;
-  display: inline-block;
-  z-index: 5;
-}
 
+#replay-button:hover {
+  box-shadow: 0 0 10px black;
+  border: black;
+}
 
 #canvas {
   width: 100%;
