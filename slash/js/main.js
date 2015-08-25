@@ -156,6 +156,7 @@ function checkResults(results, scoreBoard, slashLines, timeRange, maxDistance, a
   // debugger;
   if (currentTurn){
     results[0] ? (scoreBoard[0] += 10*Math.pow(results[0],2)) : scoreBoard[1]--;
+    showFlash(results[0]);
   }
   else if (results === null){
       scoreBoard[1]--;
@@ -164,7 +165,9 @@ function checkResults(results, scoreBoard, slashLines, timeRange, maxDistance, a
 
   if (scoreBoard[1] <= 0){
     $("body").off();
-    endGame(scoreBoard);
+    setTimeout(function(){
+      endGame(scoreBoard);
+    },800);
   }
   else if ((!currentTurn) || results[1].length === 0){
     $('.flying-object').remove();
@@ -182,6 +185,17 @@ function displayOutcome(scoreBoard){
   }
   $(".score").text(scoreBoard[0]);
   return scoreBoard;
+}
+
+function showFlash(bonus){
+  var allClear = $("#all-clear");
+  if (bonus >= 2){
+    allClear.addClass("animated bounceInRight");
+    setTimeout(function(){
+      allClear.addClass("animated bounceOutLeft");
+    },500)
+  }
+  allClear.removeClass("animated bounceInRight bounceOutLeft");
 }
 
 function isOnScreen(flyingObject){
