@@ -167,7 +167,7 @@ function checkResults(results, scoreBoard, slashLines, timeRange, maxDistance, a
     $("body").off();
     setTimeout(function(){
       endGame(scoreBoard);
-    },800);
+    },700);
   }
   else if ((!currentTurn) || results[1].length === 0){
     $('.flying-object').remove();
@@ -191,7 +191,7 @@ function showFlash(bonus){
   var allClear = $("#all-clear");
   var score = $(".score");
   var gameSpace = $(".game-space");
-  if (bonus >= 2){
+  if (bonus >= 4){
     setTimeout(function(){
       allClear.addClass("animated bounceInRight");
       score.addClass("animated pulse");

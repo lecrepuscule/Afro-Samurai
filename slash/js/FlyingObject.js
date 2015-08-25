@@ -10,9 +10,13 @@ FlyingObject = {
   distance: null,
   physicalBody: null,
 
+  morph: function(){
+    return "object-"+ Math.ceil(Math.random()*11);
+  },
+
   materialise: function(){
     var position = {top: this.origin[0], left: this.origin[1]}
-    this.physicalBody = $("<div class='flying-object invisible'>" + this.id + "</div>").attr("id","object-"+this.id);
+    this.physicalBody = $("<div class='flying-object invisible "+this.morph()+"'></div>").attr("id","object-"+this.id);
     this.physicalBody.appendTo(".game-space");
     this.physicalBody.offset(position);
   },

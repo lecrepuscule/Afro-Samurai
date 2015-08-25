@@ -142,9 +142,52 @@ body {
 .flying-object {
   height: 30px;
   width: 30px;
-  background-image: url("../images/walking-cat.gif");
   background-size: cover;
   position: absolute;
+}
+
+.object-1 {
+  background-image: url("../images/gifs/object-1.gif");
+}
+
+.object-2 {
+  background-image: url("../images/gifs/object-2.gif");
+}
+
+.object-3 {
+  background-image: url("../images/gifs/object-3.gif");
+}
+
+.object-4 {
+  background-image: url("../images/gifs/object-4.gif");
+}
+
+.object-5 {
+  background-image: url("../images/gifs/object-5.gif");
+}
+
+.object-6 {
+  background-image: url("../images/gifs/object-6.gif");
+}
+
+.object-7 {
+  background-image: url("../images/gifs/object-7.gif");
+}
+
+.object-8 {
+  background-image: url("../images/gifs/object-8.gif");
+}
+
+.object-9 {
+  background-image: url("../images/gifs/object-9.gif");
+}
+
+.object-10 {
+  background-image: url("../images/gifs/object-10.gif");
+}
+
+.object-11 {
+  background-image: url("../images/gifs/object-11.gif");
 }
 
 .invisible {
