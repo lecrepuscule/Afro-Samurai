@@ -3,6 +3,18 @@ body {
   background-size: cover;
 }
 
+.bonus-sign {
+  position: absolute;
+  top: 165px;
+  left: 170px;
+  width: 80px;
+  font-family: sans-serif;
+  font-size: 50px;
+  font-style: oblique;
+  z-index: 3;
+}
+
+
 .flash-pic {
   position:fixed;
   top: 0;

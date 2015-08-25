@@ -171,51 +171,56 @@ function showFlash(bonus){
   var allClear = $("#all-clear");
   var score = $(".score");
   var gameSpace = $(".game-space");
+  var bonusSign = $(".bonus-sign");
   switch (bonus) {
     case 4:
+      bonusSign.text("X4!")
       setTimeout(function(){
-      allClear.addClass("animated bounceInRight");
-      score.addClass("animated pulse");
-      gameSpace.addClass("animated shake");
-    },100);
-    setTimeout(function(){
-      allClear.addClass("bounceOutLeft");
-    },400);
+        bonusSign.removeClass("invisible");
+        bonusSign.addClass("animated slideInUp");
+        allClear.addClass("animated bounceInRight");
+        score.addClass("animated pulse");
+        gameSpace.addClass("animated shake");
+      },50);
+      setTimeout(function(){
+        allClear.addClass("bounceOutLeft");
+        bonusSign.addClass("slideOutUp");
+      },400);
     break;
     case 3:
+      bonusSign.text("X3")
       setTimeout(function(){
-      score.addClass("animated pulse");
-      gameSpace.addClass("animated shake");
-    },100);
+        bonusSign.removeClass("invisible");
+        bonusSign.addClass("animated slideInUp");
+        score.addClass("animated pulse");
+        gameSpace.addClass("animated shake");
+      },50);
+      setTimeout(function(){
+        bonusSign.addClass("slideOutUp");
+      },400);
+    break;
     case 2:
+      bonusSign.text("X2")
       setTimeout(function(){
-      score.addClass("animated pulse");
-    },50);
+        bonusSign.removeClass("invisible");
+        bonusSign.addClass("animated slideInUp");
+        score.addClass("animated pulse");
+      },50);
+      setTimeout(function(){
+        bonusSign.addClass("slideOutUp");
+      },400);
     break;
     case 1:
       setTimeout(function(){
-      score.addClass("animated pulse");
+        score.addClass("animated pulse");
     },50);
     break;
   }
-  // if (bonus > 3){
-  //   setTimeout(function(){
-  //     allClear.addClass("animated bounceInRight");
-  //     score.addClass("animated pulse");
-  //     gameSpace.addClass("animated shake");
-  //   },100)
-  //   setTimeout(function(){
-  //     allClear.addClass("bounceOutLeft");
-  //   },400)
-  // }
-  // else if (bonus > 0){
-  //     setTimeout(function(){
-  //     score.addClass("animated pulse");
-  //   },50)
-  // }
   allClear.removeClass("animated bounceInRight bounceOutLeft");
   score.removeClass("animated pulse");
   gameSpace.removeClass("animated shake");
+  bonusSign.removeClass("animated slideInUp slideOutUp");
+  bonusSign.addClass("invisible");
 }
 
 function isOnScreen(flyingObject){
