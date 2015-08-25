@@ -127,24 +127,13 @@ function playGame(slashLines, timeRange, maxDistance, accuracy, scoreBoard){
       currentTurn = numOnScreen;
       if (!currentTurn){
         clearInterval(safeWord);
-        // $('.flying-object').remove();
         scoreBoard = checkResults(results, scoreBoard, slashLines, timeRange, maxDistance, accuracy, currentTurn);
       }
   },5)
   return scoreBoard;
 }
 
-// function checkResults(results, scoreBoard, slashLines, timeRange, maxDistance, accuracy){
-//   if (results === null){
-//     scoreBoard[1]--;
-//   }
-//   displayOutcome(scoreBoard);
-//   $("body").off();
-//   return (scoreBoard[1] <= 0) ? endGame(scoreBoard) : playGame(slashLines, timeRange, maxDistance, accuracy, scoreBoard);
-// }
-
 function checkResults(results, scoreBoard, slashLines, timeRange, maxDistance, accuracy, currentTurn){
-  // debugger;
   if (currentTurn){
     results[0] ? (scoreBoard[0] += 10*Math.pow(results[0],2)) : scoreBoard[1]--;
     showFlash(results[0]);
@@ -182,21 +171,48 @@ function showFlash(bonus){
   var allClear = $("#all-clear");
   var score = $(".score");
   var gameSpace = $(".game-space");
-  if (bonus >= 4){
-    setTimeout(function(){
+  switch (bonus) {
+    case 4:
+      setTimeout(function(){
       allClear.addClass("animated bounceInRight");
       score.addClass("animated pulse");
       gameSpace.addClass("animated shake");
-    },100)
+    },100);
     setTimeout(function(){
       allClear.addClass("bounceOutLeft");
-    },400)
-  }
-  else if (bonus > 0){
+    },400);
+    break;
+    case 3:
       setTimeout(function(){
       score.addClass("animated pulse");
-    },50)
+      gameSpace.addClass("animated shake");
+    },100);
+    case 2:
+      setTimeout(function(){
+      score.addClass("animated pulse");
+    },50);
+    break;
+    case 1:
+      setTimeout(function(){
+      score.addClass("animated pulse");
+    },50);
+    break;
   }
+  // if (bonus > 3){
+  //   setTimeout(function(){
+  //     allClear.addClass("animated bounceInRight");
+  //     score.addClass("animated pulse");
+  //     gameSpace.addClass("animated shake");
+  //   },100)
+  //   setTimeout(function(){
+  //     allClear.addClass("bounceOutLeft");
+  //   },400)
+  // }
+  // else if (bonus > 0){
+  //     setTimeout(function(){
+  //     score.addClass("animated pulse");
+  //   },50)
+  // }
   allClear.removeClass("animated bounceInRight bounceOutLeft");
   score.removeClass("animated pulse");
   gameSpace.removeClass("animated shake");
