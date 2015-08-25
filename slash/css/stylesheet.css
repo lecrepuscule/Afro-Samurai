@@ -12,9 +12,9 @@ body {
   opacity: 0;
 }
 
-/*#all-clear {
+.show {
   opacity: 1;
-}*/
+}
 
 .difficulty {
   text-align: center;

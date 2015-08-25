@@ -189,13 +189,26 @@ function displayOutcome(scoreBoard){
 
 function showFlash(bonus){
   var allClear = $("#all-clear");
+  var score = $(".score");
+  var gameSpace = $(".game-space");
   if (bonus >= 2){
-    allClear.addClass("animated bounceInRight");
     setTimeout(function(){
-      allClear.addClass("animated bounceOutLeft");
-    },500)
+      allClear.addClass("animated bounceInRight");
+      score.addClass("animated pulse");
+      gameSpace.addClass("animated shake");
+    },100)
+    setTimeout(function(){
+      allClear.addClass("bounceOutLeft");
+    },400)
+  }
+  else if (bonus > 0){
+      setTimeout(function(){
+      score.addClass("animated pulse");
+    },50)
   }
   allClear.removeClass("animated bounceInRight bounceOutLeft");
+  score.removeClass("animated pulse");
+  gameSpace.removeClass("animated shake");
 }
 
 function isOnScreen(flyingObject){
