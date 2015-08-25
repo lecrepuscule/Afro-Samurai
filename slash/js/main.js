@@ -54,6 +54,7 @@ function initGame(settings){
 
   $(".game-space").empty();
   $("<canvas id='canvas' height='300' width='1440'></canvas>").appendTo(".game-space");
+  $("<img src='images/all-clear.png' class='flash-pic' id='all-clear'>").appendTo(".game-space");
   slashLines = setupSlashLines(slashLines);
   scoreBoard = playGame(slashLines, timeRange, maxDistance, accuracy, scoreBoard);
 }
