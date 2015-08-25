@@ -53,17 +53,16 @@ SlashLine = {
     var lineGradient = this.gradient;
     this.drawLine();
     var strikeCount = 0;
-    // debugger;
     for (i=0; i< flyingObjects.length; i++){
       var x = flyingObjects[i].physicalBody.offset().left;
       var y = flyingObjects[i].physicalBody.offset().top;
       var striked = (y + lineIntercept) / lineGradient;
-    // debugger;
       if (Math.abs(striked - x) < accuracy) {
-        flyingObjects[i].physicalBody.addClass('invisible')
+        // setTimeout(function(){
+          flyingObjects[i].physicalBody.addClass('animated zoomOutDown');
+        // }, 10);
         flyingObjects.splice(i,1);
         i--;
-    // debugger;
         strikeCount++;
         console.log("Dead cat!");
       } 
@@ -72,7 +71,6 @@ SlashLine = {
       }
     }
     console.log("inside strike function: "+ strikeCount);
-    // bonus ? (scoreBoard[0] += 10*Math.pow(bonus,2)) : scoreBoard[1]--;
     return [strikeCount, flyingObjects];
   },
 
