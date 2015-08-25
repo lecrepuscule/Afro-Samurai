@@ -3,6 +3,7 @@ var SlashLine = SlashLine || {};
 SlashLine = {
 
   id: null,
+  letter: {},
   upperEnd: null,
   lowerEnd: null,
   gradient: null,

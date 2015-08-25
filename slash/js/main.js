@@ -28,21 +28,25 @@ function initGame(settings){
   var slashLines = {
     red: {
       line: null,
+      letter: {name:"D", code:100},
       upperEnd: {top:225,left:350},
       lowerEnd: {top:525,left:1000}
     },
     green: {
       line: null,
+      letter: {name:"F", code:106},
       upperEnd: {top:225,left:800},
       lowerEnd: {top:525,left:500}
     },  
     blue: {
       line: null,
+      letter: {name:"J", code:102},
       upperEnd: {top:225,left:550},
       lowerEnd: {top:525,left:700}
     },  
     black: {
       line: null,
+      letter: {name:"K", code:107},
       upperEnd: {top:225,left:950},
       lowerEnd: {top:525,left:900}
     }
@@ -58,6 +62,7 @@ function setupSlashLines(slashLines){
   $.each(slashLines, function(key, value){
     value.line = Object.create(SlashLine);
     value.line.id = key;
+    value.line.letter = value.letter;
     value.line.upperEnd = value.upperEnd;
     value.line.lowerEnd = value.lowerEnd;
     value.line.gradient = (value.lowerEnd.top - value.upperEnd.top) / (value.lowerEnd.left - value.upperEnd.left);
@@ -84,22 +89,15 @@ function pickLines(slashLines){
 
 function findLine(e, slashLines){
   console.log(e.keyCode);
-  switch(e.keyCode){
-    case 114:
-      $("#canvas")[0].getContext("2d").strokeStyle="red";
-      return slashLines.red.line;
-    case 103:
-      $("#canvas")[0].getContext("2d").strokeStyle="green";
-      return slashLines.green.line;
-    case 98:
-      $("#canvas")[0].getContext("2d").strokeStyle="blue";
-      return slashLines.blue.line;
-    case 121:
-      $("#canvas")[0].getContext("2d").strokeStyle="black";
-      return slashLines.black.line;
-    default:
-      console.log("wrong button!")
-  }
+  var slashLine;
+  $.each(slashLines, function(key, value){
+    console.log("the line code is: "+value.letter.code)
+    if (value.letter.code === e.keyCode) {
+      slashLine = value.line;
+      $("#canvas")[0].getContext("2d").strokeStyle=key;
+    }
+  })
+  return slashLine;
 }
 
 function playGame(slashLines, timeRange, maxDistance, accuracy, scoreBoard){
