@@ -116,12 +116,9 @@ function playGame(slashLines, timeRange, maxDistance, accuracy, scoreBoard){
     console.log(results);
     flyingObjects = results[1];
     scoreBoard = checkResults(results, scoreBoard, slashLines, timeRange, maxDistance, accuracy, currentTurn);
-
-    // scoreBoard = displayOutcome(results[0]);
   });
 
   var safeWord = setInterval(function(){
-    // if (flyingObjects.length) {
       var numOnScreen = 0;
       $.each(flyingObjects, function(index, flyingObject){
         flyingObject.fly(safeWord);
@@ -133,12 +130,6 @@ function playGame(slashLines, timeRange, maxDistance, accuracy, scoreBoard){
         // $('.flying-object').remove();
         scoreBoard = checkResults(results, scoreBoard, slashLines, timeRange, maxDistance, accuracy, currentTurn);
       }
-    // }
-    // else {
-    //   clearInterval(safeWord);
-    //   $('.flying-object').remove();
-    //   scoreBoard = checkResults(results, scoreBoard, slashLines, timeRange, maxDistance, accuracy);
-    // }
   },5)
   return scoreBoard;
 }
