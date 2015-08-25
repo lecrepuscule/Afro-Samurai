@@ -11,7 +11,7 @@ FlyingObject = {
   physicalBody: null,
 
   morph: function(){
-    return "object-"+ Math.ceil(Math.random()*11);
+    return "object-"+ Math.ceil(Math.random()*10);
   },
 
   materialise: function(){
