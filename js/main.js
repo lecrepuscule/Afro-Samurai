@@ -1,5 +1,15 @@
-$(document).ready(function(){
-  chooseSettings();
+// $(document).ready(function(){
+//   chooseSettings();
+// })
+
+soundManager.setup({
+  url: '../swf/',
+  flashVersion: 9, // optional: shiny features (default = 8)
+  // optional: ignore Flash where possible, use 100% HTML5 mode
+  // preferFlash: false,
+  onready: function() {
+    chooseSettings();
+  }
 })
 
 function chooseSettings(){
@@ -25,7 +35,6 @@ function initGame(settings){
   var maxDistance = settings[2]; //determines how fast the objects fly
   var numOfObjects = settings[3]; //the max number of objects that can appear at one time
   var scoreBoard = [0,3];
-
 
   var slashLines = {
     red: {
@@ -195,11 +204,13 @@ function endGame(scoreBoard){
 }
 
 function showFlash(bonus){
+  var sound = Object.create(SoundEffect);
   var score = $(".score");
   var gameSpace = $(".game-space");
   var bonusSign = $(".bonus-sign");
   switch (bonus) {
     case 6:
+      sound.play("clear6");
       bonusSign.text("X6!!!");
       var clear6 = $("#clear6");
       setTimeout(function(){
@@ -215,6 +226,7 @@ function showFlash(bonus){
       },500);
     break;
     case 5:
+      sound.play("clear5");
       bonusSign.text("X5!!");
       var clear5 = $("#clear5");
       setTimeout(function(){
@@ -230,6 +242,7 @@ function showFlash(bonus){
       },500);
     break;
     case 4:
+      sound.play("clear4");
       var clear4 = $("#clear4");
       bonusSign.text("X4!");
       setTimeout(function(){
@@ -245,6 +258,7 @@ function showFlash(bonus){
       },400);
     break;
     case 3:
+      sound.play("normal");
       bonusSign.text("X3");
       setTimeout(function(){
         bonusSign.removeClass("invisible");
@@ -257,6 +271,7 @@ function showFlash(bonus){
       },400);
     break;
     case 2:
+      sound.play("normal");
       bonusSign.text("X2");
       setTimeout(function(){
         bonusSign.removeClass("invisible");
@@ -268,10 +283,13 @@ function showFlash(bonus){
       },400);
     break;
     case 1:
+      sound.play("normal");
       setTimeout(function(){
         score.addClass("animated pulse");
     },50);
     break;
+    default:
+      sound.play("miss");
   }
   $(".flash-pic").removeClass("animated bounceInRight bounceOutLeft");
   score.removeClass("animated pulse");
@@ -279,3 +297,5 @@ function showFlash(bonus){
   bonusSign.removeClass("animated slideInUp slideOutUp");
   bonusSign.addClass("invisible");
 }
+
+
