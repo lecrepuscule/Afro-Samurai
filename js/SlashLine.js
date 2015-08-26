@@ -9,6 +9,16 @@ SlashLine = {
   gradient: null,
   intercept: null,
 
+  calculateGradient: function(){
+    this.gradient = (this.lowerEnd.top - this.upperEnd.top) / (this.lowerEnd.left - this.upperEnd.left);
+    return this.gradient;
+  },
+
+  calculateIntercept: function(){
+    this.intercept = this.gradient * this.lowerEnd.left - this.lowerEnd.top;
+    return this.intercept;
+  },
+
   placeEndPoints: function(){
     var gameSpace = $(".game-space");
     var top = $("<div class='"+this.id+"-dots dots' id='"+this.id+"-top'>"+this.letter.name+"</div>").appendTo(gameSpace);
@@ -51,13 +61,14 @@ SlashLine = {
   strike: function(flyingObjects, accuracy){
     var lineIntercept = this.intercept;
     var lineGradient = this.gradient;
-    this.drawLine(accuracy);
+    var lineWidth = this.drawLine(accuracy);
     var strikeCount = 0;
     for (i=0; i< flyingObjects.length; i++){
-      var x = flyingObjects[i].physicalBody.offset().left;
-      var y = flyingObjects[i].physicalBody.offset().top;
-      var striked = (y + lineIntercept) / lineGradient;
-      if (Math.abs(striked - x) < accuracy) {
+      var xCenter = flyingObjects[i].physicalBody.offset().left + 15;
+      var yCenter = flyingObjects[i].physicalBody.offset().top + 15;
+      var striked = (yCenter + lineIntercept) / lineGradient;
+      var lineCenter = striked + 15;
+      if ( Math.abs(lineCenter - xCenter) <= accuracy ) {
         // setTimeout(function(){
           flyingObjects[i].physicalBody.addClass('animated zoomOutDown');
         // }, 10);
@@ -67,7 +78,7 @@ SlashLine = {
         console.log("Dead cat!");
       } 
       else {
-        console.log("miss! " + (striked-x));
+        console.log("miss! " + (lineCenter - xCenter));
       }
     }
     console.log("inside strike function: "+ strikeCount);
@@ -84,6 +95,7 @@ SlashLine = {
     setTimeout(function(){
       c.replaceWith("<canvas id='canvas' height='300' width='1440'></canvas>");
     }, 500);
+    return ctx.lineWidth;
   }
 
 }

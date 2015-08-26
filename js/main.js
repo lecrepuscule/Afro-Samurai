@@ -67,6 +67,7 @@ function initGame(settings){
   $(".game-space").css("z-index", 1);
   $("<canvas id='canvas' height='300' width='1440'></canvas>").appendTo(".game-space");
   $("<img src='images/clear4.png' class='flash-pic' id='clear4'>").appendTo(".game-space");
+
   slashLines = setupSlashLines(slashLines);
   scoreBoard = playGame(slashLines, timeRange, maxDistance, accuracy, numOfObjects, scoreBoard);
 }
@@ -78,11 +79,45 @@ function setupSlashLines(slashLines){
     value.line.letter = value.letter;
     value.line.upperEnd = value.upperEnd;
     value.line.lowerEnd = value.lowerEnd;
-    value.line.gradient = (value.lowerEnd.top - value.upperEnd.top) / (value.lowerEnd.left - value.upperEnd.left);
-    value.line.intercept = value.line.gradient * value.lowerEnd.left - value.lowerEnd.top;
+    // value.line.gradient = (value.lowerEnd.top - value.upperEnd.top) / (value.lowerEnd.left - value.upperEnd.left);
+    // value.line.intercept = value.line.gradient * value.lowerEnd.left - value.lowerEnd.top;
+    value.line.calculateGradient();
+    value.line.calculateIntercept();
     value.line.placeEndPoints();
   })
   return slashLines;
+}
+
+function playGame(slashLines, timeRange, maxDistance, accuracy, numOfObjects,scoreBoard){
+  var results = null;
+  var currentTurn = 1;
+  var slashLine = pickLines(slashLines);
+  var flyingObjects = slashLine.generateObjects(timeRange, maxDistance, numOfObjects);
+
+
+  $("body").on("keypress", function(e){
+    e.preventDefault();
+    console.log(e);
+    var strikeLine = findLine(e, slashLines);
+    results = strikeLine.strike(flyingObjects, accuracy);
+    console.log(results);
+    flyingObjects = results[1];
+    scoreBoard = checkResults(results, scoreBoard, slashLines, timeRange, maxDistance, accuracy, numOfObjects, currentTurn);
+  });
+
+  var safeWord = setInterval(function(){
+      var numOnScreen = 0;
+      $.each(flyingObjects, function(index, flyingObject){
+        flyingObject.fly();
+        numOnScreen += isOnScreen(flyingObject);
+      })
+      currentTurn = numOnScreen;
+      if (!currentTurn){
+        clearInterval(safeWord);
+        scoreBoard = checkResults(results, scoreBoard, slashLines, timeRange, maxDistance, accuracy, numOfObjects, currentTurn);
+      }
+  },5)
+  return scoreBoard;
 }
 
 
@@ -111,38 +146,6 @@ function findLine(e, slashLines){
     }
   })
   return slashLine;
-}
-
-function playGame(slashLines, timeRange, maxDistance, accuracy, numOfObjects,scoreBoard){
-  var results = null;
-  var currentTurn = 1;
-  var slashLine = pickLines(slashLines);
-  var flyingObjects = slashLine.generateObjects(timeRange, maxDistance, numOfObjects);
-
-
-  $("body").on("keypress", function(e){
-    e.preventDefault();
-    console.log(e);
-    var strikeLine = findLine(e, slashLines);
-    results = strikeLine.strike(flyingObjects, accuracy);
-    console.log(results);
-    flyingObjects = results[1];
-    scoreBoard = checkResults(results, scoreBoard, slashLines, timeRange, maxDistance, accuracy, numOfObjects, currentTurn);
-  });
-
-  var safeWord = setInterval(function(){
-      var numOnScreen = 0;
-      $.each(flyingObjects, function(index, flyingObject){
-        flyingObject.fly(safeWord);
-        numOnScreen += isOnScreen(flyingObject);
-      })
-      currentTurn = numOnScreen;
-      if (!currentTurn){
-        clearInterval(safeWord);
-        scoreBoard = checkResults(results, scoreBoard, slashLines, timeRange, maxDistance, accuracy, numOfObjects, currentTurn);
-      }
-  },5)
-  return scoreBoard;
 }
 
 //this function keeps score and determines the outcome of the game, it is called after every keypress, or if no keypress event, at the end of the turn

@@ -10,6 +10,19 @@ FlyingObject = {
   distance: null,
   physicalBody: null,
 
+  pickDisplacement: function(maxDistance){
+    this.direction = Math.floor(Math.random()*2);
+    var randomDistance = Math.ceil(Math.random()*maxDistance);
+    this.distance = this.direction ? (randomDistance + $(window).width()) : -randomDistance;
+    return this.distance;
+  },
+
+  pickSpeed: function(){
+    this.speed = (this.distance - this.origin[1]) / this.time;
+    console.log("the speed is: " + this.speed);
+    return this.speed;
+  },
+
   morph: function(){
     return "object-"+ Math.ceil(Math.random()*9);
   },
@@ -21,21 +34,7 @@ FlyingObject = {
     this.physicalBody.offset(position);
   },
 
-  pickSpeed: function(){
-    this.speed = (this.distance - this.origin[1]) / this.time;
-    console.log("the speed is: " + this.speed);
-    return this.speed;
-  },
-
-  pickDisplacement: function(maxDistance){
-    this.direction = Math.floor(Math.random()*2);
-    var randomDistance = Math.ceil(Math.random()*maxDistance);
-    this.distance = this.direction ? (randomDistance + $(window).width()) : -randomDistance;
-    console.log("the distance is: "+ this.distance);
-    return this.distance;
-  },
-
-  fly: function(safeWord){
+  fly: function(){
     this.distance -= this.speed;
     this.physicalBody.offset({left : this.distance});
     this.physicalBody.removeClass("invisible");
