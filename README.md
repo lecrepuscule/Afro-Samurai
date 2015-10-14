@@ -1,4 +1,4 @@
-# homework_project1
+# Afro Samurai
 the game that is like guitar heroes but not quite...
 
 
