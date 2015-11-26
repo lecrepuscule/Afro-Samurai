@@ -1,6 +1,6 @@
 # Afro Samurai
 the game that is like guitar heroes but not quite...
-
+(current version was developed and tested in Chrome browser only)
 
 Rules
 The game randomly generates objects flying across the screen at various speed, and the aim is to strike through them when they align with one of the four slashing lines fixed onto the screen.
